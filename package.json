@@ -1,0 +1,61 @@
+{
+  "name": "@invezgo/sdk",
+  "version": "1.0.0",
+  "description": "Official Invezgo API SDK for JavaScript and TypeScript - Comprehensive SDK for accessing Indonesia Stock Market data",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.esm.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "rollup -c rollup.config.js --format cjs",
+    "build:esm": "rollup -c rollup.config.js --format esm",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "dev": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "invezgo",
+    "api",
+    "sdk",
+    "indonesia",
+    "stock",
+    "saham",
+    "bei",
+    "trading",
+    "investment"
+  ],
+  "author": "Invezgo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/invezgo/invezgo-sdk-javascript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/invezgo/invezgo-sdk-javascript/issues"
+  },
+  "homepage": "https://github.com/invezgo/invezgo-sdk-javascript#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "rollup": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
+
