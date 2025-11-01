@@ -1,4 +1,4 @@
-import type { InvezgoConfig, ApiResponse, RequestOptions } from './types';
+import type { InvezgoConfig, RequestOptions } from './types';
 
 export class InvezgoError extends Error {
   constructor(
@@ -59,19 +59,19 @@ export class HttpClient {
         return [] as any;
       }
 
-      const data = await response.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({})) as any;
 
       // Handle error responses
       if (!response.ok) {
         throw new InvezgoError(
           response.status,
-          data.message || response.statusText,
-          data.error,
+          (data?.message as string) || response.statusText,
+          data?.error as string | undefined,
           data
         );
       }
 
-      return data;
+      return data as T;
     } catch (error: any) {
       clearTimeout(timeoutId);
 
@@ -144,18 +144,18 @@ export class HttpClient {
         return {} as any;
       }
 
-      const data = await response.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({})) as any;
 
       if (!response.ok) {
         throw new InvezgoError(
           response.status,
-          data.message || response.statusText,
-          data.error,
+          (data?.message as string) || response.statusText,
+          data?.error as string | undefined,
           data
         );
       }
 
-      return data;
+      return data as T;
     } catch (error: any) {
       clearTimeout(timeoutId);
 
@@ -201,18 +201,18 @@ export class HttpClient {
         return {} as any;
       }
 
-      const data = await response.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({})) as any;
 
       if (!response.ok) {
         throw new InvezgoError(
           response.status,
-          data.message || response.statusText,
-          data.error,
+          (data?.message as string) || response.statusText,
+          data?.error as string | undefined,
           data
         );
       }
 
-      return data;
+      return data as T;
     } catch (error: any) {
       clearTimeout(timeoutId);
 
@@ -258,18 +258,18 @@ export class HttpClient {
         return {} as any;
       }
 
-      const data = await response.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({})) as any;
 
       if (!response.ok) {
         throw new InvezgoError(
           response.status,
-          data.message || response.statusText,
-          data.error,
+          (data?.message as string) || response.statusText,
+          data?.error as string | undefined,
           data
         );
       }
 
-      return data;
+      return data as T;
     } catch (error: any) {
       clearTimeout(timeoutId);
 

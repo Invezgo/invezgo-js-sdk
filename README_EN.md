@@ -921,7 +921,7 @@ For support, please contact:
 
 - 📧 Email: admin@invezgo.com
 - 🌐 Website: https://invezgo.com
-- 🐛 Issues: [GitHub Issues](https://github.com/invezgo/invezgo-sdk-javascript/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/Invezgo/invezgo-js-sdk/issues)
 
 ## 🤝 Contributing
 
@@ -941,6 +941,6 @@ Made with ❤️ by the [Invezgo](https://invezgo.com) team
 
 **Empowering investors with better data and insights**
 
-[⭐ Star us on GitHub](https://github.com/invezgo/invezgo-sdk-javascript)
+[⭐ Star us on GitHub](https://github.com/Invezgo/invezgo-js-sdk)
 
 </div>

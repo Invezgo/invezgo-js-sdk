@@ -38,8 +38,8 @@ export class JournalsEndpoints {
     });
 
     if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data.message || 'Failed to extract journal from file');
+      const data = await response.json().catch(() => ({})) as any;
+      throw new Error((data?.message as string) || 'Failed to extract journal from file');
     }
 
     return response.json().catch(() => ({}));

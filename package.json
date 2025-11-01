@@ -41,12 +41,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/invezgo/invezgo-sdk-javascript.git"
+    "url": "git+https://github.com/Invezgo/invezgo-js-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/invezgo/invezgo-sdk-javascript/issues"
+    "url": "https://github.com/Invezgo/invezgo-js-sdk/issues"
   },
-  "homepage": "https://github.com/invezgo/invezgo-sdk-javascript#readme",
+  "homepage": "https://github.com/Invezgo/invezgo-js-sdk#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -24,6 +24,7 @@ import type {
   InsiderTransaction,
   FinancialStatementResponse,
   KeyStatResponse,
+  KeyStatValue,
   DateRangeParams,
   InvestorType,
   MarketType,

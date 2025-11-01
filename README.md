@@ -336,7 +336,7 @@ Proyek ini dirilis di bawah **MIT License** — silakan lihat [LICENSE](LICENSE)
 - 💳 [Langganan Paket](https://invezgo.com/subscription)  
 - 📋 [Syarat & Ketentuan](https://invezgo.com/terms)  
 - 🔒 [Kebijakan Privasi](https://invezgo.com/privacy-policy)  
-- 🐛 [Laporkan Bug](https://github.com/invezgo/invezgo-sdk-javascript/issues)
+- 🐛 [Laporkan Bug](https://github.com/Invezgo/invezgo-js-sdk/issues)
 
 ---
 
@@ -345,6 +345,6 @@ Proyek ini dirilis di bawah **MIT License** — silakan lihat [LICENSE](LICENSE)
 Made with ❤️ by the [Invezgo](https://invezgo.com) team  
 **Empowering Indonesian investors with better data, better insights, and better decisions**
 
-⭐ [Beri bintang di GitHub](https://github.com/invezgo/invezgo-sdk-javascript)
+⭐ [Beri bintang di GitHub](https://github.com/Invezgo/invezgo-js-sdk)
 
 </div>
