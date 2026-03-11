@@ -1,38 +1,107 @@
-# Invezgo SDK - API Saham Indonesia Resmi untuk JavaScript dan TypeScript
+<div align="center">
 
-`Invezgo SDK` adalah SDK resmi untuk mengakses **API Saham Indonesia** dari Invezgo secara konsisten, cepat, dan terstruktur. Paket ini dirancang untuk developer yang membutuhkan integrasi **API Saham Indonesia yang lengkap, resmi, dan performance-oriented** untuk aplikasi web, backend service, trading tools, dashboard analitik, screener, dan automation workflow.
+# 📈 Invezgo SDK - API Saham Indonesia Resmi untuk JavaScript & TypeScript
 
-Jika Anda mencari **API Saham Indonesia** dengan cakupan data pasar, analisis, alert, screener, watchlist, jurnal transaksi, hingga endpoint komunitas, SDK ini memberikan surface yang lebih stabil dibanding integrasi HTTP manual. Seluruh modul telah diselaraskan dengan kontrak API terbaru pada versi `1.1.0`.
+![API Saham Indonesia](https://img.shields.io/badge/API%20Saham%20Indonesia-Lengkap-blue)
+![Official SDK](https://img.shields.io/badge/SDK-Resmi-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6)
+![Node](https://img.shields.io/badge/Node-%3E%3D14-brightgreen)
 
-## Link Resmi
+**SDK resmi untuk integrasi API Saham Indonesia yang lengkap, resmi, dan performance-oriented.**
 
-- Website Invezgo: [https://invezgo.com](https://invezgo.com)
-- Dokumentasi API: [https://api.invezgo.com/documentation](https://api.invezgo.com/documentation)
+Dirancang untuk developer yang membangun aplikasi saham, dashboard analitik, screener, alert engine, watchlist, jurnal transaksi, dan backend service yang membutuhkan akses stabil ke **API Saham Indonesia** dari Invezgo.
 
-## Mengapa Invezgo untuk API Saham Indonesia
+[🌐 Website Invezgo](https://invezgo.com) • [📚 Dokumentasi API](https://api.invezgo.com/documentation)
 
-- **Resmi**: SDK ini mengikuti surface API resmi Invezgo, sehingga lebih aman untuk integrasi production.
-- **Lengkap**: Mendukung modul utama untuk data saham Indonesia, broker, index, screener, alert, watchlist, jurnal, portofolio, post, dan rekomendasi pengguna.
-- **Performance-oriented**: Menggunakan `fetch` native tanpa dependency runtime tambahan, sehingga ringan untuk cold start, CI, serverless, maupun service Node.js biasa.
-- **Developer-ready**: Mendukung TypeScript, typed DTO, error handling terstruktur, dan output bundle `CJS` + `ESM`.
-- **Up-to-date**: Surface lama yang tidak lagi ada pada OpenAPI terbaru sudah dihapus agar tidak menimbulkan false expectation saat implementasi.
+</div>
 
-## Cocok untuk Use Case Berikut
+---
 
-- Integrasi **API Saham Indonesia** ke aplikasi fintech atau investment platform
-- Dashboard harga saham, broker summary, dan corporate action
-- Screener saham Indonesia dengan formula custom
-- Alert engine dan monitoring saham berbasis rule
-- Watchlist, jurnal transaksi, dan portofolio pengguna
-- Internal tooling untuk tim riset, quant, atau data engineering
+## 🚀 Mengapa Invezgo untuk API Saham Indonesia
 
-## Instalasi
+Jika Anda mencari **API Saham Indonesia** yang siap dipakai untuk production, `@invezgo/sdk` memberikan surface integrasi yang lebih rapi dibanding request manual. SDK ini dibuat untuk mempermudah integrasi **API Saham Indonesia resmi** ke aplikasi JavaScript dan TypeScript dengan kontrak yang konsisten, typing yang jelas, dan footprint runtime yang ringan.
+
+Keunggulan utamanya:
+
+- ✅ **Resmi**: mengikuti surface API resmi Invezgo
+- ✅ **Lengkap**: mencakup data saham, broker, index, screener, alert, watchlist, jurnal, portofolio, post, dan recommendation
+- ✅ **Cepat dan ringan**: memakai `fetch` native tanpa dependency runtime tambahan
+- ✅ **Developer-first**: mendukung TypeScript, DTO terstruktur, `CJS`, `ESM`, dan error handling yang jelas
+- ✅ **Production-ready**: cocok untuk backend service, internal tools, fintech product, dan dashboard monitoring
+
+---
+
+## 🎯 Cocok untuk Use Case Berikut
+
+- 📊 Dashboard berbasis **API Saham Indonesia**
+- 🤖 Screener saham Indonesia dengan formula custom
+- 🔔 Alert saham dan monitoring market behavior
+- 🧾 Jurnal transaksi dan manajemen watchlist
+- 💼 Portofolio dan personal investment tools
+- 🏗️ Backend integration untuk aplikasi fintech dan wealth platform
+- 🧠 Research tooling untuk quant, trader, dan analis
+
+---
+
+## 📦 Instalasi
 
 ```bash
 npm install @invezgo/sdk
 ```
 
-## Quick Start
+---
+
+## 🛒 Cara Mulai dan Berlangganan
+
+Sebelum menggunakan SDK ini, Anda perlu memiliki akses aktif ke **API Saham Indonesia** dari Invezgo.
+
+### 1. Pilih paket langganan API
+
+Kunjungi halaman resmi API Saham Indonesia Invezgo untuk melihat paket yang tersedia dan memilih plan yang sesuai dengan kebutuhan aplikasi Anda:
+
+- Paket API Saham Indonesia: [https://invezgo.com/id/data-api-saham-indonesia](https://invezgo.com/id/data-api-saham-indonesia)
+
+### 2. Login ke akun Invezgo
+
+Setelah memilih paket, login ke akun Invezgo Anda melalui website utama:
+
+- Website Invezgo: [https://invezgo.com](https://invezgo.com)
+
+### 3. Generate API key
+
+Setelah langganan aktif, generate API key dari dashboard akun Invezgo Anda. API key inilah yang akan dipakai untuk autentikasi semua request ke **API Saham Indonesia**.
+
+### 4. Install SDK
+
+Install package JavaScript/TypeScript resmi:
+
+```bash
+npm install @invezgo/sdk
+```
+
+### 5. Simpan API key di environment variable
+
+Contoh yang direkomendasikan:
+
+```bash
+INVEZGO_API_KEY=your_api_key_here
+```
+
+### 6. Mulai integrasi
+
+Gunakan API key tersebut untuk mengakses endpoint Invezgo melalui SDK:
+
+```ts
+import Invezgo from '@invezgo/sdk';
+
+const client = new Invezgo({
+  apiKey: process.env.INVEZGO_API_KEY!,
+});
+```
+
+---
+
+## ⚡ Quick Start
 
 ```ts
 import Invezgo from '@invezgo/sdk';
@@ -50,9 +119,11 @@ console.log(indexes[0]);
 console.log(intraday.close);
 ```
 
-## Fitur Utama API Saham Indonesia di SDK Ini
+---
 
-### 1. Data pasar dan analysis yang lengkap
+## 🧩 Fitur Utama API Saham Indonesia di SDK Ini
+
+### 📈 Data pasar dan analysis yang lengkap
 
 Modul `analysis` mencakup endpoint penting untuk **API Saham Indonesia**, termasuk:
 
@@ -65,22 +136,24 @@ Modul `analysis` mencakup endpoint penting untuk **API Saham Indonesia**, termas
 - shareholder data, shareholder relation, insider activity, dan corporate action calendar
 - financial statement dan key statistics
 
-### 2. SDK resmi yang lebih aman untuk production
+### 🛡️ SDK resmi yang lebih aman untuk production
 
-Integrasi melalui SDK resmi membantu mengurangi mismatch path, payload, dan typing dibanding implementasi manual per endpoint. Ini penting ketika Anda membangun produk berbasis **API Saham Indonesia resmi** dan membutuhkan contract yang lebih stabil untuk tim engineering.
+Menggunakan SDK resmi membantu mengurangi mismatch pada path, query params, payload, dan struktur response. Untuk tim yang membangun produk berbasis **API Saham Indonesia resmi**, pendekatan ini membuat proses development dan maintenance lebih efisien.
 
-### 3. Ringan dan fokus pada performa
+### ⚙️ Ringan dan fokus pada performa
 
-`Invezgo SDK` tidak membawa dependency runtime tambahan. Untuk workload yang sensitif terhadap startup time atau footprint container, pendekatan ini membantu menjaga integrasi **API Saham Indonesia** tetap efisien.
+`Invezgo SDK` tidak membawa dependency runtime tambahan. Ini relevan untuk aplikasi yang sensitif terhadap startup time, cold start, footprint container, atau deployment serverless.
 
-### 4. Developer experience yang rapi
+### 👨‍💻 Developer experience yang rapi
 
 - TypeScript-first
 - `InvezgoError` untuk error handling terstruktur
 - deklarasi tipe untuk DTO dan response utama
-- build output untuk `require` dan `import`
+- output build untuk `require` dan `import`
 
-## Modul yang Tersedia
+---
+
+## 🗂️ Modul yang Tersedia
 
 - `alerts`
 - `analysis`
@@ -95,9 +168,11 @@ Integrasi melalui SDK resmi membantu mengurangi mismatch path, payload, dan typi
 - `trades`
 - `screener`
 
-## Contoh Integrasi
+---
 
-### Alert saham
+## 💡 Contoh Integrasi API Saham Indonesia
+
+### 🔔 Alert saham
 
 ```ts
 await client.alerts.add({
@@ -109,7 +184,7 @@ await client.alerts.add({
 });
 ```
 
-### Analysis dan data intraday
+### 📊 Analysis dan data intraday
 
 ```ts
 const topRetail = await client.analysis.getTopRitel('2026-03-10');
@@ -123,7 +198,7 @@ const calendar = await client.analysis.getCalendar({
 });
 ```
 
-### Watchlist
+### 👀 Watchlist
 
 ```ts
 await client.watchlists.add({
@@ -139,7 +214,7 @@ await client.watchlists.updateGroup('group-id', {
 });
 ```
 
-### Jurnal transaksi
+### 🧾 Jurnal transaksi
 
 ```ts
 await client.journals.add({
@@ -155,7 +230,7 @@ await client.journals.add({
 });
 ```
 
-### Screener saham Indonesia
+### 🔎 Screener saham Indonesia
 
 ```ts
 const results = await client.screener.screen({
@@ -164,38 +239,46 @@ const results = await client.screener.screen({
 });
 ```
 
-### Recommendation
+### 🤝 Recommendation
 
 ```ts
 const recommendations = await client.recommendation.getUserRecommendations();
 ```
 
-## Keunggulan untuk Developer
+---
 
-Saat membangun aplikasi di atas **API Saham Indonesia**, developer biasanya membutuhkan tiga hal: kontrak yang jelas, footprint yang kecil, dan surface yang mudah dipelihara. README ini menempatkan `Invezgo SDK` sebagai pilihan yang lebih tepat untuk tim engineering yang ingin mengurangi biaya integrasi sekaligus menjaga kualitas implementasi.
+## 🏗️ Keunggulan untuk Tim Developer
 
-Secara praktis, ini berarti:
+Saat membangun aplikasi di atas **API Saham Indonesia**, tim engineering biasanya membutuhkan kontrak yang jelas, integrasi yang ringan, dan surface yang mudah dipelihara. `Invezgo SDK` membantu menyederhanakan proses tersebut sehingga tim dapat fokus pada logic produk, bukan pada detail HTTP request yang berulang.
 
-- lebih sedikit boilerplate request manual
-- lebih sedikit risiko typo pada path dan payload
-- onboarding engineer baru lebih cepat
-- integrasi lebih mudah diuji dan direview
+Secara praktis, manfaatnya:
 
-## Catatan Migrasi Versi 1.1.0
+- mengurangi boilerplate request manual
+- mengurangi risiko typo pada endpoint dan payload
+- mempercepat onboarding engineer baru
+- mempermudah review, testing, dan maintenance
+
+---
+
+## 🔄 Catatan Migrasi Versi 1.1.0
 
 - ditambahkan `client.alerts`
 - ditambahkan `client.recommendation`
 - ditambahkan endpoint analysis baru seperti index list, top retail flow, intraday summary, sector stalker, shareholder 1%, dan corporate action calendar
 - DTO `watchlists`, `journals`, `membership`, dan `screener` sudah mengikuti skema request terbaru
-- `client.ai` dan `client.health` dihapus karena tidak ada di OpenAPI terbaru
+- `client.ai` dan `client.health` dihapus karena tidak lagi tersedia pada kontrak API terbaru
 
-## Build
+---
+
+## 🛠️ Build
 
 ```bash
 npm run build
 ```
 
-## Tipe yang Diekspor
+---
+
+## 🧠 Tipe yang Diekspor
 
 SDK ini mengekspor tipe inti seperti:
 
@@ -207,8 +290,10 @@ SDK ini mengekspor tipe inti seperti:
 - `FinancialStatementResponse`, `KeyStatResponse`
 - DTO endpoint seperti `AlertDto`, `CreateWatchlistDto`, `AddJournalTransactionDto`, `ScreenDto`
 
-## Referensi
+---
 
-- Website utama: [https://invezgo.com](https://invezgo.com)
-- Dokumentasi API: [https://api.invezgo.com/documentation](https://api.invezgo.com/documentation)
-- Contoh tambahan: [`docs/EXAMPLES.md`](./docs/EXAMPLES.md)
+## 🔗 Referensi
+
+- 🌐 Website utama: [https://invezgo.com](https://invezgo.com)
+- 📚 Dokumentasi API: [https://api.invezgo.com/documentation](https://api.invezgo.com/documentation)
+- 🧪 Contoh tambahan: [`docs/EXAMPLES.md`](./docs/EXAMPLES.md)
