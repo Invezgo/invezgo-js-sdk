@@ -2,24 +2,39 @@ import { HttpClient } from '../client';
 import type {
   Stock,
   Broker,
+  StockIndex,
   CompanyInformation,
   TopChangeResponse,
   TopForeignResponse,
   TopAccumulationResponse,
+  TopRetailResponse,
   ChartResponse,
+  IndexChartDataPoint,
   IntradayChartData,
+  IntradayStockData,
+  IntradayIndexData,
   OrderBookResponse,
   ShareholderDetail,
   ShareholderComposition,
   ShareholderKSEI,
+  ShareholderDetailOneItem,
+  ShareholderRelationResponse,
   BrokerSummary,
   SummaryChartItem,
   InventoryChartResponse,
+  InventoryBrokerChartItem,
   MomentumChartData,
+  SectorStalkerResponse,
+  SectorRotationResponse,
+  BrokerStalkerResponse,
+  BrokerStalkerListResponse,
   PriceTableData,
   TimeTableData,
   PriceDiaryData,
   ShareholderAbove5,
+  ShareholderOneItem,
+  ShareholderOneChartPoint,
+  CorporateActionCalendarItem,
   PaginatedResponse,
   InsiderTransaction,
   FinancialStatementResponse,
@@ -27,85 +42,140 @@ import type {
   KeyStatValue,
   DateRangeParams,
   InvestorType,
-  MarketType,
+  TradingBoardType,
   ScopeType,
   ScopeShortType,
   StatementType,
   PeriodType,
   IndicatorType,
+  SectorBaseType,
+  StalkerFilterColumn,
+  FilterOperatorType,
+  CorporateActionType,
 } from '../types';
 
 export class AnalysisEndpoints {
   constructor(private client: HttpClient) {}
 
   /**
-   * Get list of all stocks listed on BEI
+   * Get list of all stocks listed on BEI.
    */
   async getStockList(): Promise<Stock[]> {
     return this.client.get<Stock[]>('/analysis/list/stock');
   }
 
   /**
-   * Get list of all brokers/securities on BEI
+   * Get list of all brokers/securities on BEI.
    */
   async getBrokerList(): Promise<Broker[]> {
     return this.client.get<Broker[]>('/analysis/list/broker');
   }
 
   /**
-   * Get complete company information
+   * Get list of all supported IDX indexes.
+   */
+  async getIndexList(): Promise<StockIndex[]> {
+    return this.client.get<StockIndex[]>('/analysis/list/index');
+  }
+
+  /**
+   * Get complete company information.
    */
   async getInformation(code: string): Promise<CompanyInformation> {
     return this.client.get<CompanyInformation>(`/analysis/information/${code}`);
   }
 
   /**
-   * Get top gainer and loser stocks for a specific date
+   * Get top gainer and loser stocks for a specific date.
    */
   async getTopChange(date: string): Promise<TopChangeResponse> {
     return this.client.get<TopChangeResponse>('/analysis/top/change', { date });
   }
 
   /**
-   * Get top foreign accumulation and distribution
+   * Get top foreign accumulation and distribution.
    */
   async getTopForeign(date: string): Promise<TopForeignResponse> {
     return this.client.get<TopForeignResponse>('/analysis/top/foreign', { date });
   }
 
   /**
-   * Get top accumulation and distribution (bandarmologi)
+   * Get top bandarmology accumulation and distribution.
    */
   async getTopAccumulation(date: string): Promise<TopAccumulationResponse> {
     return this.client.get<TopAccumulationResponse>('/analysis/top/accumulation', { date });
   }
 
   /**
-   * Get intraday chart data
+   * Get top retail accumulation and distribution.
+   */
+  async getTopRitel(date: string): Promise<TopRetailResponse> {
+    return this.client.get<TopRetailResponse>('/analysis/top/ritel', { date });
+  }
+
+  /**
+   * Alias for getTopRitel.
+   */
+  async getTopRetail(date: string): Promise<TopRetailResponse> {
+    return this.getTopRitel(date);
+  }
+
+  /**
+   * Get intraday chart data.
    */
   async getIntradayChart(
     code: string,
-    market: MarketType = 'RG'
+    market: TradingBoardType = 'RG'
   ): Promise<IntradayChartData[]> {
     return this.client.get<IntradayChartData[]>(`/analysis/intraday/${code}`, { market });
   }
 
   /**
-   * Get order book data
+   * Get intraday stock summary data.
    */
-  async getOrderBook(code: string, market: MarketType = 'RG'): Promise<OrderBookResponse> {
+  async getIntradayData(
+    code: string,
+    market: TradingBoardType = 'RG'
+  ): Promise<IntradayStockData> {
+    return this.client.get<IntradayStockData>(`/analysis/intraday-data/${code}`, { market });
+  }
+
+  /**
+   * Get intraday index summary data.
+   */
+  async getIntradayIndex(
+    code: string,
+    market: TradingBoardType = 'RG'
+  ): Promise<IntradayIndexData> {
+    return this.client.get<IntradayIndexData>(`/analysis/intraday-index/${code}`, { market });
+  }
+
+  /**
+   * Get order book data.
+   */
+  async getOrderBook(
+    code: string,
+    market: TradingBoardType = 'RG'
+  ): Promise<OrderBookResponse> {
     return this.client.get<OrderBookResponse>(`/analysis/order-book/${code}`, { market });
   }
 
   /**
-   * Get complete stock chart data
+   * Get complete stock chart data.
    */
   async getChart(code: string, params: DateRangeParams): Promise<ChartResponse> {
     return this.client.get<ChartResponse>(`/analysis/chart/stock/${code}`, params);
   }
 
   /**
-   * Get stock chart with technical indicator
+   * Get historical index chart data.
+   */
+  async getIndexChart(code: string, params: DateRangeParams): Promise<IndexChartDataPoint[]> {
+    return this.client.get<IndexChartDataPoint[]>(`/analysis/chart/index/${code}`, params);
+  }
+
+  /**
+   * Get stock chart with technical indicator.
    */
   async getIndicatorChart(
     code: string,
@@ -119,28 +189,52 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get shareholder detail (ownership)
+   * Get shareholder detail above 5%.
    */
   async getShareholderDetail(code: string): Promise<ShareholderDetail[]> {
     return this.client.get<ShareholderDetail[]>(`/analysis/shareholder-detail/${code}`);
   }
 
   /**
-   * Get number of shareholders
+   * Get shareholder detail above 1% for a specific holder.
+   */
+  async getShareholderDetailOne(params: {
+    code: string;
+    name: string;
+  }): Promise<ShareholderDetailOneItem[]> {
+    return this.client.get<ShareholderDetailOneItem[]>('/analysis/shareholder-detail-one', params);
+  }
+
+  /**
+   * Get number of shareholders.
    */
   async getShareholderNumber(code: string): Promise<ShareholderDetail[]> {
     return this.client.get<ShareholderDetail[]>(`/analysis/shareholder/number/${code}`);
   }
 
   /**
-   * Get shareholder composition
+   * Get shareholder relation graph.
+   */
+  async getShareholderRelation(params: {
+    code?: string;
+    name?: string;
+    depth?: number;
+    max_nodes?: number;
+    neighbors?: number;
+    min_percentage?: number;
+  }): Promise<ShareholderRelationResponse> {
+    return this.client.get<ShareholderRelationResponse>('/analysis/shareholder/relation', params);
+  }
+
+  /**
+   * Get shareholder composition.
    */
   async getShareholder(code: string): Promise<ShareholderComposition[]> {
     return this.client.get<ShareholderComposition[]>(`/analysis/shareholder/${code}`);
   }
 
   /**
-   * Get KSEI shareholder data
+   * Get KSEI shareholder data.
    */
   async getShareholderKSEI(code: string, range: number): Promise<ShareholderKSEI[]> {
     return this.client.get<ShareholderKSEI[]>(`/analysis/shareholder/ksei/${code}`, {
@@ -149,39 +243,104 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get broker summary for a stock
+   * Get broker summary for a stock.
    */
   async getBrokerSummaryStock(
     code: string,
     params: DateRangeParams & {
       investor: InvestorType;
-      market: MarketType;
+      market: TradingBoardType;
     }
   ): Promise<BrokerSummary[]> {
     return this.client.get<BrokerSummary[]>(`/analysis/summary/stock/${code}`, params);
   }
 
   /**
-   * Get broker summary for a broker
+   * Get broker summary for a broker.
    */
   async getBrokerSummaryBroker(
     code: string,
     params: DateRangeParams & {
       investor: InvestorType;
-      market: MarketType;
+      market: TradingBoardType;
     }
   ): Promise<BrokerSummary[]> {
     return this.client.get<BrokerSummary[]>(`/analysis/summary/broker/${code}`, params);
   }
 
   /**
-   * Get broker summary chart for a stock
+   * Get sector stalker data.
+   */
+  async getStalkerSector(params: DateRangeParams & {
+    base?: SectorBaseType;
+    limit?: number;
+    filter?: string;
+    filter_column?: StalkerFilterColumn;
+    filter_operator?: FilterOperatorType;
+    filter_value?: number;
+  }): Promise<SectorStalkerResponse> {
+    return this.client.get<SectorStalkerResponse>('/analysis/stalker/sector', params);
+  }
+
+  /**
+   * Get sector rotation chart.
+   */
+  async getSectorRotation(params: DateRangeParams & {
+    base?: SectorBaseType;
+    length?: number;
+    tail?: number;
+    limit?: number;
+    filter?: string;
+    filter_column?: StalkerFilterColumn;
+    filter_operator?: FilterOperatorType;
+    filter_value?: number;
+  }): Promise<SectorRotationResponse> {
+    return this.client.get<SectorRotationResponse>('/analysis/sector/rotation', params);
+  }
+
+  /**
+   * Get broker stalker data for a stock.
+   */
+  async getBrokerStalker(
+    broker: string,
+    stock: string,
+    params: DateRangeParams & {
+      investor: InvestorType;
+      market: TradingBoardType;
+      scope: 'volume' | 'value';
+    }
+  ): Promise<BrokerStalkerResponse> {
+    return this.client.get<BrokerStalkerResponse>(
+      `/analysis/stalker/broker/${broker}/${stock}`,
+      params
+    );
+  }
+
+  /**
+   * Get broker stalker list.
+   */
+  async getBrokerStalkerList(
+    code: string,
+    params: DateRangeParams & {
+      investor: InvestorType;
+      scope: 'volume' | 'value';
+      market: TradingBoardType;
+    }
+  ): Promise<BrokerStalkerListResponse> {
+    return this.client.get<BrokerStalkerListResponse>(
+      `/analysis/stalker/list/${code}`,
+      params
+    );
+  }
+
+  /**
+   * Get broker summary chart for a stock.
    */
   async getBrokerSummaryChartStock(
     code: string,
     params: DateRangeParams & {
       scope: ScopeType;
-      market: MarketType;
+      market: TradingBoardType;
     }
   ): Promise<SummaryChartItem[]> {
     return this.client.get<SummaryChartItem[]>(
@@ -191,13 +350,13 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get broker summary chart for a broker
+   * Get broker summary chart for a broker.
    */
   async getBrokerSummaryChartBroker(
     code: string,
     params: DateRangeParams & {
       scope: ScopeType;
-      market: MarketType;
+      market: TradingBoardType;
     }
   ): Promise<SummaryChartItem[]> {
     return this.client.get<SummaryChartItem[]>(
@@ -207,7 +366,7 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get inventory chart for a stock
+   * Get inventory chart for a stock.
    */
   async getInventoryChartStock(
     code: string,
@@ -215,22 +374,18 @@ export class AnalysisEndpoints {
       scope: ScopeShortType;
       investor: InvestorType;
       limit: number;
-      market: MarketType;
+      market: TradingBoardType;
       filter?: string[];
     }
   ): Promise<InventoryChartResponse> {
-    const requestParams: any = { ...params };
-    if (params.filter) {
-      requestParams.filter = params.filter;
-    }
     return this.client.get<InventoryChartResponse>(
       `/analysis/inventory-chart/stock/${code}`,
-      requestParams
+      params
     );
   }
 
   /**
-   * Get inventory chart for a broker
+   * Get inventory chart for a broker.
    */
   async getInventoryChartBroker(
     code: string,
@@ -238,19 +393,18 @@ export class AnalysisEndpoints {
       scope: ScopeShortType;
       investor: InvestorType;
       limit: number;
-      market: MarketType;
+      market: TradingBoardType;
       filter?: string[];
     }
-  ): Promise<any[]> {
-    const requestParams: any = { ...params };
-    if (params.filter) {
-      requestParams.filter = params.filter;
-    }
-    return this.client.get<any[]>(`/analysis/inventory-chart/broker/${code}`, requestParams);
+  ): Promise<InventoryBrokerChartItem[]> {
+    return this.client.get<InventoryBrokerChartItem[]>(
+      `/analysis/inventory-chart/broker/${code}`,
+      params
+    );
   }
 
   /**
-   * Get momentum chart
+   * Get momentum chart.
    */
   async getMomentumChart(
     code: string,
@@ -264,7 +418,7 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get intraday inventory chart
+   * Get intraday inventory chart.
    */
   async getIntradayInventoryChart(
     code: string,
@@ -274,7 +428,7 @@ export class AnalysisEndpoints {
       total: number;
       buyer: string;
       seller: string;
-      market: MarketType;
+      market: TradingBoardType;
       broker?: string;
     }
   ): Promise<InventoryChartResponse> {
@@ -285,29 +439,29 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get sankey/crossing chart
+   * Get distribution or crossing chart.
    */
   async getSankeyChart(
     code: string,
     params: {
       type: string;
-      market: MarketType;
+      market: TradingBoardType;
       buyer?: string;
       seller?: string;
     }
-  ): Promise<InventoryChartResponse> {
-    return this.client.get<InventoryChartResponse>(`/analysis/sankey-chart/${code}`, params);
+  ): Promise<unknown> {
+    return this.client.get<unknown>(`/analysis/sankey-chart/${code}`, params);
   }
 
   /**
-   * Get price table
+   * Get price table.
    */
   async getPriceTable(code: string, date: string): Promise<PriceTableData[]> {
     return this.client.get<PriceTableData[]>(`/analysis/price-table/${code}`, { date });
   }
 
   /**
-   * Get time table
+   * Get time table.
    */
   async getTimeTable(
     code: string,
@@ -320,14 +474,14 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get price diary
+   * Get price diary.
    */
   async getPriceDiary(code: string): Promise<PriceDiaryData[]> {
     return this.client.get<PriceDiaryData[]>(`/analysis/price-diary/${code}`);
   }
 
   /**
-   * Get price seasonality
+   * Get price seasonality.
    */
   async getPriceSeasonality(code: string, range: number): Promise<PriceDiaryData[]> {
     return this.client.get<PriceDiaryData[]>(`/analysis/price-seasonality/${code}`, {
@@ -336,12 +490,12 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get shareholders above 5%
+   * Get shareholders above 5%.
    */
   async getShareholderAbove(
     params: DateRangeParams & {
-      limit: number;
-      page: number;
+      limit?: number;
+      page?: number;
       name?: string;
       broker?: string[];
       code?: string;
@@ -354,7 +508,7 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get shareholder above 5% chart
+   * Get shareholder above 5% chart.
    */
   async getShareholderAboveChart(
     code: string,
@@ -363,17 +517,51 @@ export class AnalysisEndpoints {
       name: string;
       date: string;
     }
-  ): Promise<any> {
-    return this.client.get<any>(`/analysis/shareholder-above-chart/${code}`, params);
+  ): Promise<unknown> {
+    return this.client.get<unknown>(`/analysis/shareholder-above-chart/${code}`, params);
   }
 
   /**
-   * Get insider trading data
+   * Get shareholders above 1%.
+   */
+  async getShareholderOne(
+    params: DateRangeParams & {
+      page?: number;
+      limit?: number;
+      code?: string;
+      name?: string;
+    }
+  ): Promise<PaginatedResponse<ShareholderOneItem>> {
+    return this.client.get<PaginatedResponse<ShareholderOneItem>>(
+      '/analysis/shareholder-one',
+      params
+    );
+  }
+
+  /**
+   * Get shareholder above 1% chart.
+   */
+  async getShareholderOneChart(
+    code: string,
+    params: {
+      broker?: string;
+      name?: string;
+      date?: string;
+    }
+  ): Promise<ShareholderOneChartPoint[]> {
+    return this.client.get<ShareholderOneChartPoint[]>(
+      `/analysis/shareholder-one-chart/${code}`,
+      params
+    );
+  }
+
+  /**
+   * Get insider trading data.
    */
   async getInsiderTrading(
     params: DateRangeParams & {
-      limit: number;
-      page: number;
+      limit?: number;
+      page?: number;
       name?: string;
       code?: string;
     }
@@ -385,7 +573,7 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get insider chart
+   * Get insider chart.
    */
   async getInsiderChart(
     code: string,
@@ -393,12 +581,12 @@ export class AnalysisEndpoints {
       name: string;
       date: string;
     }
-  ): Promise<any> {
-    return this.client.get<any>(`/analysis/insider-chart/${code}`, params);
+  ): Promise<unknown> {
+    return this.client.get<unknown>(`/analysis/insider-chart/${code}`, params);
   }
 
   /**
-   * Get financial statement
+   * Get financial statement.
    */
   async getFinancialStatement(
     code: string,
@@ -415,25 +603,25 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get financial statement chart
+   * Get financial statement chart.
    */
   async getFinancialStatementChart(
     code: string,
     params: {
       statement: StatementType;
       type: PeriodType;
-      limit: string;
+      limit: number;
       account: string;
     }
   ): Promise<FinancialStatementResponse['rows'][0]['values']> {
-    return this.client.get(
+    return this.client.get<FinancialStatementResponse['rows'][0]['values']>(
       `/analysis/financial-statement-chart/${code}`,
-      { ...params, limit: Math.min(Number(params.limit), 20).toString() }
+      { ...params, limit: Math.min(params.limit, 20) }
     );
   }
 
   /**
-   * Get key statistics
+   * Get key statistics.
    */
   async getKeyStat(
     code: string,
@@ -449,17 +637,46 @@ export class AnalysisEndpoints {
   }
 
   /**
-   * Get key statistics chart
+   * Get key statistics chart.
    */
   async getKeyStatChart(
     code: string,
     params: {
       type: PeriodType;
-      limit: string;
+      limit: number;
       name: string;
     }
   ): Promise<KeyStatValue[]> {
-    return this.client.get<KeyStatValue[]>(`/analysis/keystat-chart/${code}`, params);
+    return this.client.get<KeyStatValue[]>(`/analysis/keystat-chart/${code}`, {
+      ...params,
+      limit: Math.min(params.limit, 20),
+    });
+  }
+
+  /**
+   * Get corporate action calendar.
+   */
+  async getCalendar(params: {
+    code?: string;
+    type?: CorporateActionType;
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedResponse<CorporateActionCalendarItem>> {
+    return this.client.get<PaginatedResponse<CorporateActionCalendarItem>>(
+      '/analysis/calendar',
+      params
+    );
+  }
+
+  /**
+   * Alias for getCalendar.
+   */
+  async getCorporateActionCalendar(params: {
+    code?: string;
+    type?: CorporateActionType;
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedResponse<CorporateActionCalendarItem>> {
+    return this.getCalendar(params);
   }
 }
-

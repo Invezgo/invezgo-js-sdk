@@ -1,350 +1,214 @@
-<div align="center">
+# Invezgo SDK - API Saham Indonesia Resmi untuk JavaScript dan TypeScript
 
-![Versi](https://img.shields.io/badge/versi-1.0.0-blue.svg)
-![Lisensi](https://img.shields.io/badge/lisensi-MIT-green.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-Siap-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen.svg)
+`Invezgo SDK` adalah SDK resmi untuk mengakses **API Saham Indonesia** dari Invezgo secara konsisten, cepat, dan terstruktur. Paket ini dirancang untuk developer yang membutuhkan integrasi **API Saham Indonesia yang lengkap, resmi, dan performance-oriented** untuk aplikasi web, backend service, trading tools, dashboard analitik, screener, dan automation workflow.
 
-# 📈 Invezgo SDK
+Jika Anda mencari **API Saham Indonesia** dengan cakupan data pasar, analisis, alert, screener, watchlist, jurnal transaksi, hingga endpoint komunitas, SDK ini memberikan surface yang lebih stabil dibanding integrasi HTTP manual. Seluruh modul telah diselaraskan dengan kontrak API terbaru pada versi `1.1.0`.
 
-**SDK Resmi JavaScript/TypeScript untuk Invezgo API — Platform AI & Data Pasar Saham Indonesia**
+## Link Resmi
 
-SDK ini menyediakan akses mudah ke **API Saham Indonesia** dari platform **Invezgo**, mencakup data **Bursa Efek Indonesia (BEI)**, **laporan keuangan emiten**, **Bandarmology**, **Foreign Flow**, **AI Insight**, dan banyak lagi.
+- Website Invezgo: [https://invezgo.com](https://invezgo.com)
+- Dokumentasi API: [https://api.invezgo.com/documentation](https://api.invezgo.com/documentation)
 
-[✨ Fitur](#-fitur) • [⚙️ Instalasi](#-instalasi) • [🚀 Mulai Cepat](#-mulai-cepat) • [📚 Dokumentasi](#-dokumentasi) • [💡 Contoh](#-contoh) • [📖 API Reference](#-api-reference)
+## Mengapa Invezgo untuk API Saham Indonesia
 
-</div>
+- **Resmi**: SDK ini mengikuti surface API resmi Invezgo, sehingga lebih aman untuk integrasi production.
+- **Lengkap**: Mendukung modul utama untuk data saham Indonesia, broker, index, screener, alert, watchlist, jurnal, portofolio, post, dan rekomendasi pengguna.
+- **Performance-oriented**: Menggunakan `fetch` native tanpa dependency runtime tambahan, sehingga ringan untuk cold start, CI, serverless, maupun service Node.js biasa.
+- **Developer-ready**: Mendukung TypeScript, typed DTO, error handling terstruktur, dan output bundle `CJS` + `ESM`.
+- **Up-to-date**: Surface lama yang tidak lagi ada pada OpenAPI terbaru sudah dihapus agar tidak menimbulkan false expectation saat implementasi.
 
----
+## Cocok untuk Use Case Berikut
 
-## 🇮🇩 Tentang Invezgo
+- Integrasi **API Saham Indonesia** ke aplikasi fintech atau investment platform
+- Dashboard harga saham, broker summary, dan corporate action
+- Screener saham Indonesia dengan formula custom
+- Alert engine dan monitoring saham berbasis rule
+- Watchlist, jurnal transaksi, dan portofolio pengguna
+- Internal tooling untuk tim riset, quant, atau data engineering
 
-**Invezgo** adalah **platform analisis saham berbasis kecerdasan buatan (AI)** yang berfokus pada pasar modal Indonesia.  
-Misi kami adalah membantu investor ritel mendapatkan **akses setara terhadap data, wawasan, dan analisis pasar saham** melalui kombinasi teknologi data, AI, dan antarmuka yang mudah digunakan.
-
-Invezgo menyediakan:
-- 📊 **Data pasar saham Indonesia (BEI)** secara real-time  
-- 🧮 **Analisis otomatis** seperti Bandarmology, Foreign Flow, dan akumulasi investor  
-- 🤖 **AI Insight** yang menjelaskan pola perdagangan dan perilaku pasar  
-- 📈 **Laporan keuangan & indikator fundamental** yang terintegrasi  
-- 🧠 **Alat riset seperti screener, portofolio, watchlist, dan jurnal trading**  
-
-Dengan **Invezgo SDK**, Anda dapat mengintegrasikan seluruh fitur tersebut langsung ke aplikasi Anda — baik untuk **Fintech**, **dashboard analisis saham**, **screener otomatis**, atau **riset kuantitatif**.
-
----
-
-## ✨ Fitur Utama
-
-- 🔥 **Dukungan Penuh TypeScript** — Semua endpoint memiliki definisi tipe lengkap  
-- 📦 **Dual Module (CJS & ESM)** — Dapat digunakan di Node.js maupun browser modern  
-- 🎯 **Cakupan Lengkap** — Mencakup semua endpoint API Invezgo  
-- 🛡️ **Error Handling Terstruktur** — Menampilkan kode, pesan, dan detail error  
-- ⚡ **Async/Await Modern** — Memanfaatkan sintaks modern yang mudah dibaca  
-- 📚 **Dokumentasi Lengkap** — Mendukung IntelliSense & komentar JSDoc  
-- 🚀 **Tanpa Dependensi** — Ringan, cepat, dan efisien  
-- 🔐 **Keamanan Otomatis** — Autentikasi via Bearer Token  
-- 🌐 **Node.js & Browser** — Dapat digunakan di server maupun aplikasi web  
-
----
-
-## ⚙️ Instalasi
-
-Pasang SDK menggunakan npm, yarn, atau pnpm:
+## Instalasi
 
 ```bash
-# Menggunakan npm
 npm install @invezgo/sdk
-
-# Menggunakan yarn
-yarn add @invezgo/sdk
-
-# Menggunakan pnpm
-pnpm add @invezgo/sdk
 ```
 
----
+## Quick Start
 
-## 🚀 Mulai Cepat
-
-### 1️⃣ Dapatkan API Key Anda
-
-Untuk mulai menggunakan SDK, Anda membutuhkan API key dari Invezgo:
-
-- 🔑 [Pengaturan API Key](https://invezgo.com/id/setting/api)
-- 💳 [Paket Langganan](https://invezgo.com/subscription)
-
----
-
-### 2️⃣ Contoh JavaScript (CommonJS)
-
-```javascript
-const { Invezgo } = require('@invezgo/sdk');
-
-const client = new Invezgo({
-  apiKey: 'api-key-anda'
-});
-
-// Ambil daftar seluruh saham
-(async () => {
-  try {
-    const stocks = await client.analysis.getStockList();
-    console.log(`Ditemukan ${stocks.length} saham`);
-    console.log(stocks[0]); // { code: 'BBCA', name: 'Bank Central Asia', logo: '...' }
-  } catch (error) {
-    console.error('Terjadi kesalahan:', error.message);
-  }
-})();
-```
-
----
-
-### 3️⃣ Contoh TypeScript / ES Modules
-
-```typescript
+```ts
 import Invezgo from '@invezgo/sdk';
 
 const client = new Invezgo({
-  apiKey: 'api-key-anda'
+  apiKey: process.env.INVEZGO_API_KEY!,
 });
 
-(async () => {
-  try {
-    const info = await client.analysis.getInformation('BBCA');
-    console.log(info.name);   // Bank Central Asia
-    console.log(info.sector); // Keuangan
-  } catch (error) {
-    console.error('Error:', error);
-  }
-})();
-```
-
----
-
-## 📚 Dokumentasi
-
-### Konfigurasi
-
-```typescript
-import Invezgo from '@invezgo/sdk';
-
-const client = new Invezgo({
-  apiKey: 'api-key-anda',              // Wajib
-  baseURL: 'https://api.invezgo.com',  // Opsional
-  timeout: 30000                       // Opsional (default 30 detik)
-});
-```
-
----
-
-### Kategori Endpoint
-
-| Kategori | Deskripsi | Jumlah Metode |
-|----------|------------|---------------|
-| **`analysis`** | Analisis saham, grafik, data keuangan | 30+ |
-| **`watchlists`** | Manajemen watchlist pribadi | 7 |
-| **`journals`** | Catatan transaksi/jurnal trading | 5 |
-| **`portfolios`** | Portofolio & ringkasan investasi | 2 |
-| **`ai`** | Analisis saham dengan AI | 10 |
-| **`search`** | Pencarian saham & pengguna | 3 |
-| **`profile`** | Profil pengguna & sosial | 8 |
-| **`membership`** | Langganan & transaksi paket | 5 |
-| **`posts`** | Konten komunitas & postingan | 8 |
-| **`trades`** | Data transaksi realisasi | 4 |
-| **`screener`** | Filter saham otomatis | 3 |
-| **`health`** | Status kesehatan API | 3 |
-
----
-
-## 💡 Contoh Penggunaan
-
-### 📊 Analisis Saham
-
-```typescript
-import Invezgo from '@invezgo/sdk';
-const client = new Invezgo({ apiKey: 'api-key-anda' });
-
-// Ambil seluruh daftar saham
 const stocks = await client.analysis.getStockList();
-console.log(`Total saham: ${stocks.length}`);
+const indexes = await client.analysis.getIndexList();
+const intraday = await client.analysis.getIntradayData('BBCA', 'RG');
 
-// Ambil informasi perusahaan
-const info = await client.analysis.getInformation('BBCA');
-console.log(info.name); // Bank Central Asia
-console.log(info.sector); // Keuangan
+console.log(stocks[0]);
+console.log(indexes[0]);
+console.log(intraday.close);
 ```
 
----
+## Fitur Utama API Saham Indonesia di SDK Ini
 
-### 💰 Laporan Keuangan Emiten
+### 1. Data pasar dan analysis yang lengkap
 
-```typescript
-// Ambil laporan Neraca (Balance Sheet)
-const balanceSheet = await client.analysis.getFinancialStatement('BBCA', {
-  statement: 'BS',
-  type: 'Q',
-  limit: 10
+Modul `analysis` mencakup endpoint penting untuk **API Saham Indonesia**, termasuk:
+
+- daftar saham dan broker BEI
+- daftar index IDX
+- top gainer, top loser, top foreign, top accumulation, dan top retail flow
+- chart saham dan index
+- intraday chart, intraday summary, dan order book
+- broker summary, broker stalker, inventory chart, momentum chart
+- shareholder data, shareholder relation, insider activity, dan corporate action calendar
+- financial statement dan key statistics
+
+### 2. SDK resmi yang lebih aman untuk production
+
+Integrasi melalui SDK resmi membantu mengurangi mismatch path, payload, dan typing dibanding implementasi manual per endpoint. Ini penting ketika Anda membangun produk berbasis **API Saham Indonesia resmi** dan membutuhkan contract yang lebih stabil untuk tim engineering.
+
+### 3. Ringan dan fokus pada performa
+
+`Invezgo SDK` tidak membawa dependency runtime tambahan. Untuk workload yang sensitif terhadap startup time atau footprint container, pendekatan ini membantu menjaga integrasi **API Saham Indonesia** tetap efisien.
+
+### 4. Developer experience yang rapi
+
+- TypeScript-first
+- `InvezgoError` untuk error handling terstruktur
+- deklarasi tipe untuk DTO dan response utama
+- build output untuk `require` dan `import`
+
+## Modul yang Tersedia
+
+- `alerts`
+- `analysis`
+- `watchlists`
+- `journals`
+- `portfolios`
+- `search`
+- `profile`
+- `membership`
+- `posts`
+- `recommendation`
+- `trades`
+- `screener`
+
+## Contoh Integrasi
+
+### Alert saham
+
+```ts
+await client.alerts.add({
+  name: 'Breakout volume',
+  formula: 'close > ema(20) and volume > sma(volume, 20)',
+  category: ['COMPOSITE'],
+  every: 'END_OF_DAY',
+  send: 'IN_OUT',
+});
+```
+
+### Analysis dan data intraday
+
+```ts
+const topRetail = await client.analysis.getTopRitel('2026-03-10');
+
+const intraday = await client.analysis.getIntradayData('BBCA', 'RG');
+
+const calendar = await client.analysis.getCalendar({
+  code: 'BBCA',
+  page: 1,
+  limit: 10,
+});
+```
+
+### Watchlist
+
+```ts
+await client.watchlists.add({
+  group: 'banking',
+  code: 'BBCA',
+  price: 9000,
+  scope: ['private'],
+  note: 'Area pantau',
 });
 
-console.log(balanceSheet.rows);
-console.log(balanceSheet.columns);
-```
-
----
-
-### 🧭 Broker & Bandarmology
-
-```typescript
-// Ambil data ringkasan broker untuk saham tertentu
-const summary = await client.analysis.getBrokerSummaryStock('BBCA', {
-  from: '2024-12-01',
-  to: '2024-12-30',
-  investor: 'all',
-  market: 'RG'
+await client.watchlists.updateGroup('group-id', {
+  name: 'Big Caps',
 });
-console.log(summary);
 ```
 
----
+### Jurnal transaksi
 
-### 🤖 Analisis AI
-
-```typescript
-// Analisis AI terhadap aktivitas broker
-const result = await client.ai.analyzeInventoryChart('BBCA', {
-  from: '2024-12-01',
-  to: '2024-12-30',
-  scope: 'vol',
-  investor: 'all',
-  limit: 5,
-  market: 'RG'
+```ts
+await client.journals.add({
+  code: 'BBCA',
+  broker: 'AK',
+  date: '2026-03-10',
+  lot: 10,
+  fee: 15000,
+  price: 9050,
+  status: 'BUY',
+  scope: ['private'],
+  note: 'Entry bertahap',
 });
-
-console.log(result.summary);
 ```
 
----
+### Screener saham Indonesia
 
-### 🔎 Screener Saham Otomatis
-
-```typescript
+```ts
 const results = await client.screener.screen({
-  columns: ['volume', 'close', 'value'],
-  conditions: [
-    { ratio: 'BASIC', column: 'close', operator: '>=', value: '5000' },
-    { ratio: 'COMPARE', column: 'value', compare: 'volume', operator: '>', multiply: 'x', value: '1' }
-  ]
+  formula: 'close > ema(20)',
+  category: ['COMPOSITE', 'IDXFINANCE'],
 });
 ```
 
----
+### Recommendation
 
-## 📖 Referensi API
-
-Tersedia lebih dari **100 endpoint terstruktur** dalam kategori berikut:
-
-- `analysis.getStockList()`, `getBrokerList()`, `getInformation(code)`
-- `getChart(code, {from, to})`, `getOrderBook(code)`, `getIntraday(code)`
-- `getTopChange(date)`, `getTopForeign(date)`, `getTopAccumulation(date)`
-- `getFinancialStatement(code, {...})`
-- `getKeyStat(code, {...})`, `getKeyStatChart(...)`
-- `getShareholder(code)`, `getShareholderKSEI(...)`, `getInsider(...)`
-- `getBrokerSummaryStock(...)`, `getInventoryChartStock(...)`
-- `ai.analyzeInventoryChart(...)`, `ai.analyzeShareholderAbove(...)`
-- `watchlists.*`, `journals.*`, `portfolios.*`, `screener.*`, `health.*`
-
----
-
-## 🔐 Keamanan
-
-1. Jangan pernah commit **API key** ke repositori publik  
-2. Gunakan **environment variable** di server:
-   ```typescript
-   const client = new Invezgo({
-     apiKey: process.env.INVEZGO_API_KEY!
-   });
-   ```
-3. Gunakan kunci berbeda untuk *dev* dan *production*  
-4. Lakukan rotasi API key secara berkala  
-
----
-
-## 🌍 Kompatibilitas
-
-SDK ini menggunakan `fetch` API bawaan yang tersedia di:
-
-- ✅ Browser modern (Chrome, Edge, Safari, Firefox)
-- ✅ Node.js 18+
-- ⚠️ Node.js 14–17 → butuh `node-fetch`
-- ⚠️ Browser lama → butuh `whatwg-fetch`
-
----
-
-## ⚠️ Penanganan Error
-
-```typescript
-import { Invezgo, InvezgoError } from '@invezgo/sdk';
-
-try {
-  await client.analysis.getInformation('INVALID');
-} catch (err) {
-  if (err instanceof InvezgoError) {
-    console.error('Kode:', err.statusCode);
-    console.error('Pesan:', err.message);
-  }
-}
+```ts
+const recommendations = await client.recommendation.getUserRecommendations();
 ```
 
----
+## Keunggulan untuk Developer
 
-## 🧠 FAQ
+Saat membangun aplikasi di atas **API Saham Indonesia**, developer biasanya membutuhkan tiga hal: kontrak yang jelas, footprint yang kecil, dan surface yang mudah dipelihara. README ini menempatkan `Invezgo SDK` sebagai pilihan yang lebih tepat untuk tim engineering yang ingin mengurangi biaya integrasi sekaligus menjaga kualitas implementasi.
 
-**Apakah data ini real-time?**  
-> Sebagian data seperti harga dan orderbook bersifat real-time (jika tersedia). Beberapa data seperti laporan keuangan bersifat periodik (EoD atau kuartalan).
+Secara praktis, ini berarti:
 
-**Apakah aman digunakan di frontend?**  
-> Sebaiknya gunakan server (backend) untuk menyimpan API key, atau gunakan token scoped khusus frontend.
+- lebih sedikit boilerplate request manual
+- lebih sedikit risiko typo pada path dan payload
+- onboarding engineer baru lebih cepat
+- integrasi lebih mudah diuji dan direview
 
-**Apakah SDK ini gratis?**  
-> Beberapa endpoint memerlukan langganan. Lihat [Paket Langganan](https://invezgo.com/subscription).
+## Catatan Migrasi Versi 1.1.0
 
----
+- ditambahkan `client.alerts`
+- ditambahkan `client.recommendation`
+- ditambahkan endpoint analysis baru seperti index list, top retail flow, intraday summary, sector stalker, shareholder 1%, dan corporate action calendar
+- DTO `watchlists`, `journals`, `membership`, dan `screener` sudah mengikuti skema request terbaru
+- `client.ai` dan `client.health` dihapus karena tidak ada di OpenAPI terbaru
 
-## 🤝 Kontribusi
+## Build
 
-Kami sangat terbuka terhadap kontribusi komunitas.  
-Langkahnya:
+```bash
+npm run build
+```
 
-1. Fork repository ini  
-2. Buat branch baru: `git checkout -b fitur-baru`  
-3. Commit perubahan: `git commit -m "feat: tambah fitur baru"`  
-4. Push: `git push origin fitur-baru`  
-5. Buka Pull Request  
+## Tipe yang Diekspor
 
----
+SDK ini mengekspor tipe inti seperti:
 
-## 📝 Lisensi
+- `InvezgoConfig`
+- `Stock`, `Broker`, `StockIndex`
+- `TopChangeResponse`, `TopRetailResponse`
+- `IntradayStockData`, `IntradayIndexData`
+- `ShareholderRelationResponse`
+- `FinancialStatementResponse`, `KeyStatResponse`
+- DTO endpoint seperti `AlertDto`, `CreateWatchlistDto`, `AddJournalTransactionDto`, `ScreenDto`
 
-Proyek ini dirilis di bawah **MIT License** — silakan lihat [LICENSE](LICENSE).
+## Referensi
 
----
-
-## 🔗 Tautan Penting
-
-- 🌐 [Website Invezgo](https://invezgo.com)  
-- 📚 [Dokumentasi API](https://api.invezgo.com)  
-- 🔑 [Dapatkan API Key](https://invezgo.com/id/setting/api)  
-- 💳 [Langganan Paket](https://invezgo.com/subscription)  
-- 📋 [Syarat & Ketentuan](https://invezgo.com/terms)  
-- 🔒 [Kebijakan Privasi](https://invezgo.com/privacy-policy)  
-- 🐛 [Laporkan Bug](https://github.com/Invezgo/invezgo-js-sdk/issues)
-
----
-
-<div align="center">
-
-Made with ❤️ by the [Invezgo](https://invezgo.com) team  
-**Empowering Indonesian investors with better data, better insights, and better decisions**
-
-⭐ [Beri bintang di GitHub](https://github.com/Invezgo/invezgo-js-sdk)
-
-</div>
+- Website utama: [https://invezgo.com](https://invezgo.com)
+- Dokumentasi API: [https://api.invezgo.com/documentation](https://api.invezgo.com/documentation)
+- Contoh tambahan: [`docs/EXAMPLES.md`](./docs/EXAMPLES.md)

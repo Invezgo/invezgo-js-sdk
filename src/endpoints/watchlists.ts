@@ -1,14 +1,16 @@
 import { HttpClient } from '../client';
 
 export interface CreateWatchlistDto {
+  group: string;
   code: string;
-  group?: string;
+  price: number;
+  note?: string;
+  scope: string[];
 }
 
 export interface UpdateWatchlistDto {
-  id: string;
-  code?: string;
-  group?: string;
+  group: string;
+  price: number;
 }
 
 export interface CreateGroupDto {
@@ -23,52 +25,68 @@ export class WatchlistsEndpoints {
   constructor(private client: HttpClient) {}
 
   /**
-   * Get list of watchlists
+   * Get list of watchlists.
    */
-  async list(group?: string): Promise<any[]> {
-    return this.client.get<any[]>('/watchlists', { group: group || 'null' });
+  async list(group = 'null'): Promise<unknown[]> {
+    return this.client.get<unknown[]>('/watchlists', { group });
   }
 
   /**
-   * Add stock to watchlist
+   * Add stock to watchlist.
    */
-  async add(dto: CreateWatchlistDto): Promise<any> {
-    return this.client.post<any>('/watchlists', dto);
+  async add(dto: CreateWatchlistDto): Promise<unknown> {
+    return this.client.post<unknown>('/watchlists', dto);
   }
 
   /**
-   * Delete watchlist
+   * Delete watchlist entries.
+   *
+   * The current OpenAPI spec does not describe delete filters,
+   * but the SDK keeps optional query params for batch deletion support.
    */
-  async delete(params: { ids?: string[] }): Promise<any> {
-    return this.client.delete<any>('/watchlists', params);
+  async delete(params?: { ids?: string[] }): Promise<unknown> {
+    return this.client.delete<unknown>('/watchlists', params);
   }
 
   /**
-   * Get list of watchlist groups
+   * Get list of watchlist groups.
    */
-  async listGroups(): Promise<any[]> {
-    return this.client.get<any[]>('/watchlists/group');
+  async listGroups(): Promise<unknown[]> {
+    return this.client.get<unknown[]>('/watchlists/group');
   }
 
   /**
-   * Add new watchlist group
+   * Add new watchlist group.
    */
-  async addGroup(dto: CreateGroupDto): Promise<any> {
-    return this.client.post<any>('/watchlists/group', dto);
+  async addGroup(dto: CreateGroupDto): Promise<unknown> {
+    return this.client.post<unknown>('/watchlists/group', dto);
   }
 
   /**
-   * Update watchlist
+   * Update watchlist group.
    */
-  async update(id: string, dto: UpdateWatchlistDto): Promise<any> {
-    return this.client.put<any>(`/watchlists/${id}`, dto);
+  async updateGroup(id: string, dto: CreateGroupDto): Promise<unknown> {
+    return this.client.put<unknown>(`/watchlists/group/${id}`, dto);
   }
 
   /**
-   * Update watchlist note
+   * Delete watchlist group.
    */
-  async updateNote(id: string, dto: UpdateNoteWatchlistDto): Promise<any> {
-    return this.client.patch<any>(`/watchlists/${id}`, dto);
+  async deleteGroup(id: string): Promise<unknown> {
+    return this.client.delete<unknown>(`/watchlists/group/${id}`);
+  }
+
+  /**
+   * Update watchlist.
+   */
+  async update(id: string, dto: UpdateWatchlistDto): Promise<unknown> {
+    return this.client.put<unknown>(`/watchlists/${id}`, dto);
+  }
+
+  /**
+   * Update watchlist note.
+   */
+  async updateNote(id: string, dto: UpdateNoteWatchlistDto): Promise<unknown> {
+    return this.client.patch<unknown>(`/watchlists/${id}`, dto);
   }
 }
-

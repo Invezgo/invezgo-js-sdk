@@ -1,6 +1,6 @@
 {
   "name": "@invezgo/sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Official Invezgo API SDK for JavaScript and TypeScript - Comprehensive SDK for accessing Indonesia Stock Market data",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -19,8 +19,8 @@
   ],
   "scripts": {
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
-    "build:cjs": "rollup -c rollup.config.js --format cjs",
-    "build:esm": "rollup -c rollup.config.js --format esm",
+    "build:cjs": "rollup -c rollup.config.mjs --format cjs",
+    "build:esm": "rollup -c rollup.config.mjs --format esm",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "dev": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -58,4 +58,3 @@
     "node": ">=14.0.0"
   }
 }
-

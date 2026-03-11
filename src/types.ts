@@ -8,7 +8,7 @@ export interface InvezgoConfig {
   timeout?: number;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data?: T;
   statusCode?: number;
   message?: string;
@@ -22,7 +22,12 @@ export interface PaginatedResponse<T> {
   data: T[];
 }
 
-// Stock List Types
+export interface GraphPoint {
+  date: string;
+  value: number;
+}
+
+// Reference Types
 export interface Stock {
   code: string;
   name: string;
@@ -32,6 +37,24 @@ export interface Stock {
 export interface Broker {
   name: string;
   code: string;
+}
+
+export type IndexCategory =
+  | 'headline'
+  | 'sector'
+  | 'sharia'
+  | 'esg'
+  | 'factor'
+  | 'thematic'
+  | 'board'
+  | 'partnership'
+  | 'smc'
+  | string;
+
+export interface StockIndex {
+  code: string;
+  name: string;
+  category: IndexCategory;
 }
 
 // Company Information Types
@@ -49,43 +72,49 @@ export interface CompanyInformation {
   listing_date?: string;
   website?: string;
   logo?: string;
-  additional_info?: any;
-  people?: any;
-  report_type?: any;
-  administration?: any;
-  description?: any;
-  ipo_pct?: number;
-  ipo_price?: number;
-  ipo_share?: number;
-  ipo_underwriter?: string;
-  nominal_price?: number;
+  additional_info?: unknown;
+  people?: unknown;
+  report_type?: unknown;
+  administration?: unknown;
+  description?: unknown;
+  ipo_pct?: number | null;
+  ipo_price?: number | null;
+  ipo_share?: number | null;
+  ipo_underwriter?: string | null;
+  nominal_price?: number | null;
   commissioner?: Array<{ name: string; position: string }>;
   director?: Array<{ name: string; position: string }>;
   subsidiary?: Array<{ name: string; percentage: number }>;
 }
 
-// Top Change Types
-export interface TopChangeItem {
+// Market Flow Types
+export interface TopFlowItem {
   code: string;
   name: string;
   price: number;
   change: number;
   logo?: string;
+  graph?: GraphPoint[];
 }
 
 export interface TopChangeResponse {
-  gain: TopChangeItem[];
-  loss: TopChangeItem[];
+  gain: TopFlowItem[];
+  loss: TopFlowItem[];
 }
 
 export interface TopForeignResponse {
-  accum: TopChangeItem[];
-  dist: TopChangeItem[];
+  accum: TopFlowItem[];
+  dist: TopFlowItem[];
 }
 
 export interface TopAccumulationResponse {
-  accum: TopChangeItem[];
-  dist: TopChangeItem[];
+  accum: TopFlowItem[];
+  dist: TopFlowItem[];
+}
+
+export interface TopRetailResponse {
+  accum: TopFlowItem[];
+  dist: TopFlowItem[];
 }
 
 // Chart Types
@@ -95,20 +124,27 @@ export interface ChartDataPoint {
   high?: number;
   low?: number;
   close?: number;
-  volume?: number;
-  freq?: number;
-  value?: number;
+  volume?: number | string;
+  freq?: number | string;
+  value?: number | string;
+}
+
+export interface BrokerChartPoint {
+  date: string;
+  value: number;
 }
 
 export interface BrokerData {
   broker: string;
-  data: Array<{ date: string; value: number }>;
+  data: BrokerChartPoint[];
 }
 
 export interface ChartResponse {
   price: Array<ChartDataPoint & { code: string }>;
   broker?: BrokerData[];
 }
+
+export interface IndexChartDataPoint extends ChartDataPoint {}
 
 export interface IntradayChartData {
   date: string;
@@ -119,6 +155,45 @@ export interface IntradayChartData {
   volume: number;
   freq: number;
   value: number;
+}
+
+export interface IntradayStockData {
+  code: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  avg: number;
+  volume: number;
+  freq: number;
+  value: number;
+  prev: number;
+  bid_price: number;
+  bid_lot: number;
+  bid_freq: number;
+  offer_price: number;
+  offer_lot: number;
+  offer_freq: number;
+  iep: number;
+  iev: number;
+}
+
+export interface IntradayIndexData {
+  code: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  freq: number;
+  value: number;
+  prev: number;
+  positive: number;
+  negative: number;
+  neutral: number;
+  suspend: number;
+  market_cap: number;
+  market_value: number;
 }
 
 export interface OrderBookResponse {
@@ -171,6 +246,86 @@ export interface ShareholderKSEI {
   foreign_ot: string;
 }
 
+export interface ShareholderDetailOneItem {
+  code: string;
+  name: string;
+  type: string;
+  status: string;
+  nationality: string;
+  domicile: string;
+  scripless: number;
+  scrip: number;
+  total: number;
+  percentage: number;
+}
+
+export interface ShareholderRelationNode {
+  id: string;
+  type: string;
+  kind: string;
+  label: string;
+  root: boolean;
+  depth: number;
+  percentage: number;
+  source_type: string;
+  code?: string;
+  company_name?: string;
+  logo?: string;
+  name?: string;
+}
+
+export interface ShareholderRelationEdge {
+  id: string;
+  source: string;
+  target: string;
+  code?: string;
+  name: string;
+  normalized_name: string;
+  percentage: number;
+  weight: number;
+  source_type: string;
+}
+
+export interface ShareholderRelationResponse {
+  nodes: ShareholderRelationNode[];
+  edges: ShareholderRelationEdge[];
+}
+
+export interface ShareholderAbove5 {
+  date: string;
+  code: string;
+  name: string;
+  format_securities: string;
+  prev_val: string;
+  next_val: string;
+  change: string;
+}
+
+export interface ShareholderOneItem {
+  date: string;
+  code: string;
+  name: string;
+  type: string;
+  status: string;
+  nationality: string;
+  domicile: string;
+  prev_scripless: string;
+  next_scripless: string;
+  prev_scrip: string;
+  next_scrip: string;
+  prev_total: string;
+  next_total: string;
+  prev_pct: number;
+  next_pct: number;
+}
+
+export interface ShareholderOneChartPoint {
+  date: string;
+  scrip: string;
+  scripless: string;
+  total: string;
+}
+
 // Broker Summary Types
 export interface BrokerSummary {
   code: string;
@@ -190,13 +345,16 @@ export interface SummaryChartItem {
   fill: string;
 }
 
-// Inventory Chart Types
 export interface InventoryChartResponse {
   price: Array<ChartDataPoint & { code: string }>;
   broker: BrokerData[];
 }
 
-// Momentum Chart Types
+export interface InventoryBrokerChartItem {
+  code: string;
+  data: GraphPoint[];
+}
+
 export interface MomentumChartData {
   time: string;
   buy_lot: number;
@@ -205,7 +363,72 @@ export interface MomentumChartData {
   sell_percentage: number;
 }
 
-// Price Table Types
+export interface SectorStalkerSeries {
+  index: string;
+  data: GraphPoint[];
+}
+
+export interface SectorStalkerResponse {
+  index: SectorStalkerSeries[];
+}
+
+export interface SectorRotationPoint {
+  date: string;
+  x: number;
+  y: number;
+}
+
+export interface SectorRotationItem {
+  code: string;
+  name: string;
+  trail: SectorRotationPoint[];
+  quadrant: string;
+}
+
+export interface SectorRotationResponse {
+  benchmark: string;
+  lastDate: string;
+  data: SectorRotationItem[];
+}
+
+export interface BrokerStalkerResponse {
+  broker: string;
+  stock: string;
+  summary: {
+    active: number;
+    total: number;
+    avg: number;
+    peak: {
+      date: string;
+      value: number;
+    };
+  };
+  calendar: Array<{
+    date: string;
+    value: number;
+    buy: number;
+    sell: number;
+    buy_dom: number;
+  }>;
+}
+
+export interface BrokerStalkerListResponse {
+  summary: {
+    stocks: number;
+    total_net: number;
+    top: string;
+    concentration: number;
+    buy_dom: number;
+  };
+  list: Array<{
+    code: string;
+    value: number;
+    transaction: number;
+    buy_dom: number;
+  }>;
+}
+
+// Price Types
 export interface PriceTableData {
   price: number;
   buy_volume: number;
@@ -214,7 +437,6 @@ export interface PriceTableData {
   sell_freq: number;
 }
 
-// Time Table Types
 export interface TimeTableData {
   time: string;
   open: number;
@@ -226,7 +448,6 @@ export interface TimeTableData {
   sell: number;
 }
 
-// Price Diary Types
 export interface PriceDiaryData {
   date: string;
   price: number;
@@ -235,15 +456,24 @@ export interface PriceDiaryData {
   change: number;
 }
 
-// Shareholder Above 5% Types
-export interface ShareholderAbove5 {
-  date: string;
+export type CorporateActionType =
+  | 'IPO'
+  | 'PUBLIC_EXPOSE'
+  | 'REVERSE'
+  | 'RIGHT'
+  | 'RUPS_RESULT'
+  | 'RUPS_SCHEDULE'
+  | 'SPLIT'
+  | 'WARRANT'
+  | 'BONUS'
+  | 'CONVERTION'
+  | 'DIVIDEND'
+  | string;
+
+export interface CorporateActionCalendarItem {
   code: string;
-  name: string;
-  format_securities: string;
-  prev_val: string;
-  next_val: string;
-  change: string;
+  type: CorporateActionType;
+  payload: Record<string, unknown>;
 }
 
 // Insider Trading Types
@@ -322,21 +552,80 @@ export interface KeyStatResponse {
 
 // Query Parameters Types
 export interface DateRangeParams {
-  from: string; // YYYY-MM-DD
-  to: string; // YYYY-MM-DD
+  from: string;
+  to: string;
 }
 
 export type InvestorType = 'all' | 'f' | 'd';
-export type MarketType = 'RG' | 'NG' | 'TN' | 'ALL';
+export type TradingBoardType = 'RG' | 'NG' | 'TN';
+export type MarketType = TradingBoardType | 'ALL';
 export type ScopeType = 'volume' | 'value' | 'freq';
 export type ScopeShortType = 'vol' | 'val' | 'freq';
 export type StatementType = 'BS' | 'IS' | 'CF';
 export type PeriodType = 'FY' | 'Q' | 'Q1' | 'Q2' | 'Q3' | 'Q4';
 export type IndicatorType = 'bdm' | 'rsi' | 'macd' | string;
 
+export type ScreenerCategory =
+  | 'COMPOSITE'
+  | 'SYARIAH'
+  | 'IDXENERGY'
+  | 'IDXBASIC'
+  | 'IDXINDUST'
+  | 'IDXNONCYC'
+  | 'IDXCYCLIC'
+  | 'IDXHEALTH'
+  | 'IDXFINANCE'
+  | 'IDXPROPERT'
+  | 'IDXTECHNO'
+  | 'IDXINFRA'
+  | 'IDXTRANS';
+
+export type SectorBaseType =
+  | 'COMPOSITE'
+  | 'IDX30'
+  | 'IDX80'
+  | 'LQ45'
+  | 'IDXFINANCE'
+  | 'IDXENERGY'
+  | 'IDXBASIC'
+  | 'IDXINDUST'
+  | 'IDXNONCYC'
+  | 'IDXCYCLIC'
+  | 'IDXHEALTH'
+  | 'IDXPROPERT'
+  | 'IDXTECHNO'
+  | 'IDXINFRA'
+  | 'IDXTRANS';
+
+export type StalkerFilterColumn =
+  | 'change'
+  | 'value'
+  | 'volume'
+  | 'foreign'
+  | 'freq'
+  | 'bdm'
+  | 'ritel'
+  | 'ratio'
+  | 'open'
+  | 'high'
+  | 'low'
+  | 'close';
+
+export type FilterOperatorType = '<' | '>' | '=' | '>=' | '<=' | '!=';
+
+export type AlertIntervalType =
+  | 'FOURTY_FIVE_SECONDS'
+  | 'FIVE_MINUTES'
+  | 'TEN_MINUTES'
+  | 'THIRTY_MINUTES'
+  | 'ONE_HOUR'
+  | 'END_SESSION'
+  | 'END_OF_DAY';
+
+export type AlertSendType = 'IN_OUT' | 'IN' | 'OUT';
+
 // Request Options
 export interface RequestOptions {
   timeout?: number;
   headers?: Record<string, string>;
 }
-

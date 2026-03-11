@@ -1,53 +1,53 @@
 import { HttpClient } from '../client';
 
 export interface AddMembershipDto {
-  membershipId: string;
-  // Add other required fields based on API
+  name: string;
+  price: number;
+  benefit: string[];
 }
 
 export class MembershipEndpoints {
   constructor(private client: HttpClient) {}
 
   /**
-   * Get list of memberships
+   * Get list of memberships.
    */
-  async list(): Promise<any[]> {
-    return this.client.get<any[]>('/membership');
+  async list(): Promise<unknown[]> {
+    return this.client.get<unknown[]>('/membership');
   }
 
   /**
-   * Add new membership
+   * Add new membership.
    */
-  async add(dto: AddMembershipDto): Promise<any> {
-    return this.client.post<any>('/membership', dto);
+  async add(dto: AddMembershipDto): Promise<unknown> {
+    return this.client.post<unknown>('/membership', dto);
   }
 
   /**
-   * Get membership scope
+   * Get membership scopes.
    */
-  async getScope(): Promise<any> {
-    return this.client.get<any>('/membership/scope');
+  async getScope(): Promise<unknown> {
+    return this.client.get<unknown>('/membership/scope');
   }
 
   /**
-   * Get membership transactions
+   * Get membership transactions.
    */
-  async getTransactions(): Promise<any[]> {
-    return this.client.get<any[]>('/membership/list');
+  async getTransactions(): Promise<unknown[]> {
+    return this.client.get<unknown[]>('/membership/list');
   }
 
   /**
-   * Update membership
+   * Update membership.
    */
-  async update(id: string, dto: AddMembershipDto): Promise<any> {
-    return this.client.put<any>(`/membership/${id}`, dto);
+  async update(id: string, dto: AddMembershipDto): Promise<unknown> {
+    return this.client.put<unknown>(`/membership/${id}`, dto);
   }
 
   /**
-   * Delete membership
+   * Delete membership.
    */
-  async delete(id: string): Promise<any> {
-    return this.client.delete<any>(`/membership/${id}`);
+  async delete(id: string): Promise<unknown> {
+    return this.client.delete<unknown>(`/membership/${id}`);
   }
 }
-

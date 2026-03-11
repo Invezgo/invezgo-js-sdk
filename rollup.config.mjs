@@ -7,20 +7,19 @@ export default {
       file: 'dist/index.js',
       format: 'cjs',
       exports: 'named',
-      sourcemap: true
+      sourcemap: true,
     },
     {
       file: 'dist/index.esm.js',
       format: 'esm',
-      sourcemap: true
-    }
+      sourcemap: true,
+    },
   ],
   plugins: [
     typescript({
       tsconfig: 'tsconfig.json',
-      clean: true
-    })
+      clean: true,
+    }),
   ],
-  external: []
+  external: [],
 };
-

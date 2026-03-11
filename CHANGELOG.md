@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-03-11
+
+### Changed
+- Migrated the SDK surface to match the latest API contract
+- Removed undocumented legacy modules for `ai` and `health`
+- Updated watchlist, journal, membership, and screener DTOs to the latest request schema
+- Expanded `analysis` coverage for index, retail flow, intraday summary, sector stalker, shareholder 1%, and corporate action endpoints
+
+### Added
+- Added `alerts` endpoint module
+- Added `recommendation` endpoint module
+- Added missing watchlist group update/delete support
+- Added screener preset update/delete support
+
 ## [1.0.0] - 2024-12-30
 
 ### Added
@@ -38,5 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Order book and intraday data
 - AI-powered insights
 
+[1.1.0]: https://github.com/Invezgo/invezgo-js-sdk/releases/tag/v1.1.0
 [1.0.0]: https://github.com/Invezgo/invezgo-js-sdk/releases/tag/v1.0.0
 
