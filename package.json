@@ -1,6 +1,6 @@
 {
   "name": "@invezgo/sdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Official Invezgo API SDK for JavaScript and TypeScript - Comprehensive SDK for accessing Indonesia Stock Market data",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

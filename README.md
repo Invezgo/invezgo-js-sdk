@@ -167,6 +167,7 @@ Menggunakan SDK resmi membantu mengurangi mismatch pada path, query params, payl
 - `recommendation`
 - `trades`
 - `screener`
+- `usage`
 
 ---
 
@@ -245,6 +246,13 @@ const results = await client.screener.screen({
 const recommendations = await client.recommendation.getUserRecommendations();
 ```
 
+### 📊 API Usage Statistics
+
+```ts
+const usage = await client.usage.getApiUsage();
+console.log(`Remaining API calls: ${usage.remaining}/${usage.limit}`);
+```
+
 ---
 
 ## 🏗️ Keunggulan untuk Tim Developer
@@ -259,6 +267,12 @@ Secara praktis, manfaatnya:
 - mempermudah review, testing, dan maintenance
 
 ---
+
+## 🔄 Catatan Migrasi Versi 1.2.0
+
+- ditambahkan `client.usage` untuk memantau limit dan kuota penggunaan API key
+- ditambahkan endpoint analysis baru: `getMultiTimeChart`, `getShareholderHigh`, `getShareholderClassification`, dan `getShareholderClassifyTable`
+- tipe data fully typed untuk seluruh endpoint yang baru ditambahkan
 
 ## 🔄 Catatan Migrasi Versi 1.1.0
 

@@ -52,6 +52,11 @@ import type {
   StalkerFilterColumn,
   FilterOperatorType,
   CorporateActionType,
+  TimeframeType,
+  MultiTimeframeChartPoint,
+  ShareholderHighConcentration,
+  ShareholderClassification,
+  ShareholderClassifyTable,
 } from '../types';
 
 export class AnalysisEndpoints {
@@ -678,5 +683,47 @@ export class AnalysisEndpoints {
     limit?: number;
   }): Promise<PaginatedResponse<CorporateActionCalendarItem>> {
     return this.getCalendar(params);
+  }
+
+  /**
+   * Get multi-timeframe chart data for stocks or indexes.
+   */
+  async getMultiTimeChart(
+    code: string,
+    params: DateRangeParams & { timeframe: TimeframeType }
+  ): Promise<MultiTimeframeChartPoint[]> {
+    return this.client.get<MultiTimeframeChartPoint[]>(
+      `/analysis/chart/multi-time/${code}`,
+      params
+    );
+  }
+
+  /**
+   * Get high concentration stock ownership data for all issuers.
+   */
+  async getShareholderHigh(): Promise<ShareholderHighConcentration[]> {
+    return this.client.get<ShareholderHighConcentration[]>('/analysis/shareholder/high');
+  }
+
+  /**
+   * Get complete shareholder data with all investor classifications for a specific period.
+   */
+  async getShareholderClassification(
+    code: string,
+    range: number
+  ): Promise<ShareholderClassification[]> {
+    return this.client.get<ShareholderClassification[]>(
+      `/analysis/shareholder/classification/${code}`,
+      { range: Math.min(range, 36) }
+    );
+  }
+
+  /**
+   * Get latest shareholder data with investor classifications in table format.
+   */
+  async getShareholderClassifyTable(code: string): Promise<ShareholderClassifyTable> {
+    return this.client.get<ShareholderClassifyTable>(
+      `/analysis/shareholder/classify-table/${code}`
+    );
   }
 }

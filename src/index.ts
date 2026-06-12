@@ -18,6 +18,7 @@ export * from './endpoints/membership';
 export * from './endpoints/trades';
 export * from './endpoints/screener';
 export * from './endpoints/recommendation';
+export * from './endpoints/usage';
 
 import { Invezgo } from './invezgo';
 

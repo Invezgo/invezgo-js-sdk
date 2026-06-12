@@ -629,3 +629,76 @@ export interface RequestOptions {
   timeout?: number;
   headers?: Record<string, string>;
 }
+
+export type TimeframeType = '1' | '5' | '15' | '30' | '60' | 'D' | 'W' | 'M';
+
+export interface MultiTimeframeChartPoint {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export interface ShareholderHighConcentration {
+  code: string;
+  date: string;
+  percentage: number;
+}
+
+export interface ShareholderClassification {
+  code: string;
+  date: string;
+  bk: string;
+  gv: string;
+  pe: string;
+  tb: string;
+  vc: string;
+  pb: string;
+  ef: string;
+  im: string;
+  ia: string;
+  br: string;
+  hf: string;
+  sw: string;
+  cm: string;
+  cv: string;
+  fm: string;
+  sa: string;
+  pp: string;
+  ps: string;
+  sp: string;
+  cr: string;
+  as: string;
+  so: string;
+  cb: string;
+  oc: string;
+  dc: string;
+  cn: string;
+  cg: string;
+  cp: string;
+  io: string;
+  pl: string;
+  pt: string;
+  ed: string;
+  mf: string;
+  sc: string;
+  pf: string;
+  ib: string;
+  is: string;
+  fd: string;
+  in: string;
+  total: string;
+}
+
+export type ShareholderClassifyTable = Omit<ShareholderClassification, 'date'>;
+
+export interface ApiUsageResponse {
+  usage: number;
+  remaining: number;
+  limit: number;
+  isBlocked: boolean;
+  expire: string;
+}
+
