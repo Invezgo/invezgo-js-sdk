@@ -57,6 +57,7 @@ import type {
   ShareholderHighConcentration,
   ShareholderClassification,
   ShareholderClassifyTable,
+  OrderQueueItem,
 } from '../types';
 
 export class AnalysisEndpoints {
@@ -725,5 +726,20 @@ export class AnalysisEndpoints {
     return this.client.get<ShareholderClassifyTable>(
       `/analysis/shareholder/classify-table/${code}`
     );
+  }
+
+  /**
+   * Get order queue (order tracking) for a stock at a specific price, side, page, and limit.
+   */
+  async getOrderQueue(
+    code: string,
+    params: {
+      price: string | number;
+      side: 'BUY' | 'SELL';
+      page?: string | number;
+      limit?: string | number;
+    }
+  ): Promise<OrderQueueItem[]> {
+    return this.client.get<OrderQueueItem[]>(`/analysis/queue/${code}`, params);
   }
 }

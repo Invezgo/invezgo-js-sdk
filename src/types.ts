@@ -210,6 +210,17 @@ export interface OrderBookResponse {
   }>;
 }
 
+export interface OrderQueueItem {
+  time: string;
+  order_id: string;
+  order_volume: number;
+  open_volume: number;
+  done_volume: number;
+  order_value: number;
+  open_value: number;
+  done_value: number;
+}
+
 // Shareholder Types
 export interface ShareholderDetail {
   date: string;
