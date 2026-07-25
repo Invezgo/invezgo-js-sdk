@@ -221,6 +221,19 @@ export interface OrderQueueItem {
   done_value: number;
 }
 
+export interface RunningTradeItem {
+  board: TradingBoardType | string;
+  time: string;
+  price: number;
+  volume: number;
+  buyer: string;
+  seller: string;
+  buyer_dom: string;
+  seller_dom: string;
+  type: 'BUY' | 'SELL' | string;
+  avg_price: number;
+}
+
 // Shareholder Types
 export interface ShareholderDetail {
   date: string;
@@ -565,6 +578,33 @@ export interface KeyStatResponse {
 export interface DateRangeParams {
   from: string;
   to: string;
+}
+
+export interface RunningTradeParams {
+  date: string;
+  page?: number | string;
+  limit?: number | string;
+  type?: 'ALL' | 'BUY' | 'SELL';
+  orderby?: 'TIME' | 'PRICE' | 'VOLUME';
+  minimum?: number | string;
+  maximum?: number | string;
+  market?: MarketType;
+  pricefrom?: number | string;
+  priceto?: number | string;
+  timefrom?: string;
+  timeto?: string;
+  sort?: 'ASC' | 'DESC';
+}
+
+export interface BatchOrderBookParams {
+  market: TradingBoardType;
+  date?: string;
+  time?: string;
+}
+
+export interface BatchIntradayDataParams {
+  market: TradingBoardType;
+  date?: string;
 }
 
 export type InvestorType = 'all' | 'f' | 'd';

@@ -12,6 +12,7 @@ import { RecommendationEndpoints } from './endpoints/recommendation';
 import { TradesEndpoints } from './endpoints/trades';
 import { ScreenerEndpoints } from './endpoints/screener';
 import { UsageEndpoints } from './endpoints/usage';
+import { BatchEndpoints } from './endpoints/batch';
 import type { InvezgoConfig } from './types';
 
 export class Invezgo {
@@ -28,6 +29,7 @@ export class Invezgo {
   public readonly trades: TradesEndpoints;
   public readonly screener: ScreenerEndpoints;
   public readonly usage: UsageEndpoints;
+  public readonly batch: BatchEndpoints;
 
   private client: HttpClient;
 
@@ -47,6 +49,7 @@ export class Invezgo {
     this.trades = new TradesEndpoints(this.client);
     this.screener = new ScreenerEndpoints(this.client);
     this.usage = new UsageEndpoints(this.client);
+    this.batch = new BatchEndpoints(this.client);
   }
 
   /**

@@ -131,7 +131,7 @@ Modul `analysis` mencakup endpoint penting untuk **API Saham Indonesia**, termas
 - daftar index IDX
 - top gainer, top loser, top foreign, top accumulation, dan top retail flow
 - chart saham dan index
-- intraday chart, intraday summary, dan order book
+- intraday chart, intraday summary, running trade, dan order book
 - broker summary, broker stalker, inventory chart, momentum chart
 - shareholder data, shareholder relation, insider activity, dan corporate action calendar
 - financial statement dan key statistics
@@ -168,6 +168,7 @@ Menggunakan SDK resmi membantu mengurangi mismatch pada path, query params, payl
 - `trades`
 - `screener`
 - `usage`
+- `batch`
 
 ---
 

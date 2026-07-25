@@ -43,6 +43,7 @@ export class HttpClient {
       const headers: Record<string, string> = {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'User-Agent': 'Invezgo JS SDK',
         ...options.headers,
       };
 
@@ -128,6 +129,7 @@ export class HttpClient {
       const headers: Record<string, string> = {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'User-Agent': 'Invezgo JS SDK',
         ...requestOptions.headers,
       };
 
@@ -185,6 +187,7 @@ export class HttpClient {
       const headers: Record<string, string> = {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'User-Agent': 'Invezgo JS SDK',
         ...options?.headers,
       };
 
@@ -242,6 +245,7 @@ export class HttpClient {
       const headers: Record<string, string> = {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'User-Agent': 'Invezgo JS SDK',
         ...options?.headers,
       };
 

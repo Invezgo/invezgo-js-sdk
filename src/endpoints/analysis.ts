@@ -58,6 +58,8 @@ import type {
   ShareholderClassification,
   ShareholderClassifyTable,
   OrderQueueItem,
+  RunningTradeItem,
+  RunningTradeParams,
 } from '../types';
 
 export class AnalysisEndpoints {
@@ -741,5 +743,31 @@ export class AnalysisEndpoints {
     }
   ): Promise<OrderQueueItem[]> {
     return this.client.get<OrderQueueItem[]>(`/analysis/queue/${code}`, params);
+  }
+
+  /**
+   * Get realtime/historical running trade transaction data for a specific stock code.
+   *
+   * @param code Stock code (e.g. 'BBCA')
+   * @param params Query parameters including date (YYYY-MM-DD), page, limit, type, orderby, etc.
+   */
+  async getRunningTrade(
+    code: string,
+    params: RunningTradeParams
+  ): Promise<PaginatedResponse<RunningTradeItem>> {
+    return this.client.get<PaginatedResponse<RunningTradeItem>>(
+      `/analysis/running-trade/${code}`,
+      params
+    );
+  }
+
+  /**
+   * Alias for getRunningTrade.
+   */
+  async getStockRunningTrade(
+    code: string,
+    params: RunningTradeParams
+  ): Promise<PaginatedResponse<RunningTradeItem>> {
+    return this.getRunningTrade(code, params);
   }
 }

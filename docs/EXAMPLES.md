@@ -38,6 +38,14 @@ const topRetail = await client.analysis.getTopRitel('2026-03-10');
 const stockIntraday = await client.analysis.getIntradayData('BBCA', 'RG');
 const indexIntraday = await client.analysis.getIntradayIndex('COMPOSITE', 'RG');
 
+const runningTrade = await client.analysis.getRunningTrade('BBCA', {
+  date: '2026-03-25',
+  page: 1,
+  limit: 50,
+  type: 'BUY',
+  market: 'RG',
+});
+
 const relation = await client.analysis.getShareholderRelation({
   code: 'BBCA',
   depth: 2,
@@ -102,4 +110,21 @@ const results = await client.screener.screen({
 
 ```ts
 const recommendations = await client.recommendation.getUserRecommendations();
+```
+
+## Batch
+
+```ts
+// Fetch order book for multiple stocks in 1 request
+const orderBooks = await client.batch.getOrderBook(['BBCA', 'GOTO', 'HUMI'], {
+  market: 'RG',
+});
+
+// Fetch intraday stock data for multiple stocks
+const intradayStocks = await client.batch.getIntradayData('BBCA|GOTO|HUMI', {
+  market: 'RG',
+});
+
+// Fetch intraday index data for multiple indexes
+const intradayIndexes = await client.batch.getIntradayIndex(['COMPOSITE', 'LQ45', 'IDX30']);
 ```
