@@ -1,0 +1,66 @@
+{
+  "name": "@invezgo/sdk",
+  "version": "2.0.0",
+  "description": "Official Invezgo API SDK for JavaScript & TypeScript: fully typed access to Indonesia Stock Exchange (IDX/BEI) data with built-in LRU caching and API key rotation",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "generate": "python ../codegen/generate.py ts",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && rollup -c rollup.config.mjs && tsc --emitDeclarationOnly --outDir dist",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p examples",
+    "test": "npm run build && node --test test/client.test.mjs",
+    "prepublishOnly": "npm run typecheck && npm test"
+  },
+  "keywords": [
+    "api",
+    "api-saham",
+    "bei",
+    "idx",
+    "indonesia",
+    "investment",
+    "invezgo",
+    "saham",
+    "sdk",
+    "stock",
+    "trading",
+    "typescript"
+  ],
+  "author": "Invezgo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Invezgo/invezgo-js-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Invezgo/invezgo-js-sdk/issues"
+  },
+  "homepage": "https://github.com/Invezgo/invezgo-js-sdk#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "rollup": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false
+}

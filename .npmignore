@@ -1,0 +1,49 @@
+# Development files
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+rollup.config.js
+
+# Development dependencies
+node_modules/
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Tests
+test/
+tests/
+*.test.ts
+*.spec.ts
+
+# Documentation (keep README.md and LICENSE)
+docs/
+*.md
+!README.md
+
+# Build config
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Temporary files
+*.tmp
+*.temp
+dist/**/*.map
+
