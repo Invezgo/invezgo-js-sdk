@@ -1,6 +1,6 @@
 {
   "name": "@invezgo/sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Official Invezgo API SDK for JavaScript & TypeScript: fully typed access to Indonesia Stock Exchange (IDX/BEI) data with built-in LRU caching and API key rotation",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
