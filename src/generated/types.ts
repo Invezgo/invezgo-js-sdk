@@ -71,6 +71,7 @@ export interface AlertRequest {
   every: string;
   send: string;
   scope?: string[] | null;
+  /** Formula alert (sama dengan batas formula screener) */
   formula: string;
 }
 
@@ -87,6 +88,7 @@ export interface UpdateAlertRequest {
   category?: string[] | null;
   every: string;
   send: string;
+  /** Formula alert (sama dengan batas formula screener) */
   formula: string;
   scope?: string[] | null;
 }
@@ -968,84 +970,244 @@ export interface ShareholderClassificationItem {
   code: string;
   /** Data date; WIB wall-clock DateTime with a literal Z suffix (not UTC), e.g. 2026-10-16T00:00:00.000Z */
   date: string;
-  /** Shares held by Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Bank investors (shares) (numeric string) */
+  local_bk: string;
+  /** Shares held by foreign Bank investors (shares) (numeric string) */
+  foreign_bk: string;
+  /** Shares held by Bank investors, local_bk + foreign_bk (shares) (numeric string) */
   bk: string;
-  /** Shares held by Government investors (shares) (numeric string) */
+  /** Shares held by domestic Government investors (shares) (numeric string) */
+  local_gv: string;
+  /** Shares held by foreign Government investors (shares) (numeric string) */
+  foreign_gv: string;
+  /** Shares held by Government investors, local_gv + foreign_gv (shares) (numeric string) */
   gv: string;
-  /** Shares held by Private Equity investors (shares) (numeric string) */
+  /** Shares held by domestic Private Equity investors (shares) (numeric string) */
+  local_pe: string;
+  /** Shares held by foreign Private Equity investors (shares) (numeric string) */
+  foreign_pe: string;
+  /** Shares held by Private Equity investors, local_pe + foreign_pe (shares) (numeric string) */
   pe: string;
-  /** Shares held by Trustee Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Trustee Bank investors (shares) (numeric string) */
+  local_tb: string;
+  /** Shares held by foreign Trustee Bank investors (shares) (numeric string) */
+  foreign_tb: string;
+  /** Shares held by Trustee Bank investors, local_tb + foreign_tb (shares) (numeric string) */
   tb: string;
-  /** Shares held by Venture Capital investors (shares) (numeric string) */
+  /** Shares held by domestic Venture Capital investors (shares) (numeric string) */
+  local_vc: string;
+  /** Shares held by foreign Venture Capital investors (shares) (numeric string) */
+  foreign_vc: string;
+  /** Shares held by Venture Capital investors, local_vc + foreign_vc (shares) (numeric string) */
   vc: string;
-  /** Shares held by Private Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Private Bank investors (shares) (numeric string) */
+  local_pb: string;
+  /** Shares held by foreign Private Bank investors (shares) (numeric string) */
+  foreign_pb: string;
+  /** Shares held by Private Bank investors, local_pb + foreign_pb (shares) (numeric string) */
   pb: string;
-  /** Shares held by Exchange Traded Fund (ETF) investors (shares) (numeric string) */
+  /** Shares held by domestic Exchange Traded Fund (ETF) investors (shares) (numeric string) */
+  local_ef: string;
+  /** Shares held by foreign Exchange Traded Fund (ETF) investors (shares) (numeric string) */
+  foreign_ef: string;
+  /** Shares held by Exchange Traded Fund (ETF) investors, local_ef + foreign_ef (shares) (numeric string) */
   ef: string;
-  /** Shares held by Investment Manager investors (shares) (numeric string) */
+  /** Shares held by domestic Investment Manager investors (shares) (numeric string) */
+  local_im: string;
+  /** Shares held by foreign Investment Manager investors (shares) (numeric string) */
+  foreign_im: string;
+  /** Shares held by Investment Manager investors, local_im + foreign_im (shares) (numeric string) */
   im: string;
-  /** Shares held by Investment Advisor investors (shares) (numeric string) */
+  /** Shares held by domestic Investment Advisor investors (shares) (numeric string) */
+  local_ia: string;
+  /** Shares held by foreign Investment Advisor investors (shares) (numeric string) */
+  foreign_ia: string;
+  /** Shares held by Investment Advisor investors, local_ia + foreign_ia (shares) (numeric string) */
   ia: string;
-  /** Shares held by Brokerage Firm investors (shares) (numeric string) */
+  /** Shares held by domestic Brokerage Firm investors (shares) (numeric string) */
+  local_br: string;
+  /** Shares held by foreign Brokerage Firm investors (shares) (numeric string) */
+  foreign_br: string;
+  /** Shares held by Brokerage Firm investors, local_br + foreign_br (shares) (numeric string) */
   br: string;
-  /** Shares held by Hedge Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Hedge Fund investors (shares) (numeric string) */
+  local_hf: string;
+  /** Shares held by foreign Hedge Fund investors (shares) (numeric string) */
+  foreign_hf: string;
+  /** Shares held by Hedge Fund investors, local_hf + foreign_hf (shares) (numeric string) */
   hf: string;
-  /** Shares held by Sovereign Wealth Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Sovereign Wealth Fund investors (shares) (numeric string) */
+  local_sw: string;
+  /** Shares held by foreign Sovereign Wealth Fund investors (shares) (numeric string) */
+  foreign_sw: string;
+  /** Shares held by Sovereign Wealth Fund investors, local_sw + foreign_sw (shares) (numeric string) */
   sw: string;
-  /** Shares held by Capital Market Supporting Institution investors (shares) (numeric string) */
+  /** Shares held by domestic Capital Market Supporting Institution investors (shares) (numeric string) */
+  local_cm: string;
+  /** Shares held by foreign Capital Market Supporting Institution investors (shares) (numeric string) */
+  foreign_cm: string;
+  /** Shares held by Capital Market Supporting Institution investors, local_cm + foreign_cm (shares) (numeric string) */
   cm: string;
-  /** Shares held by Commanditaire Vennootschap (CV) investors (shares) (numeric string) */
+  /** Shares held by domestic Commanditaire Vennootschap (CV) investors (shares) (numeric string) */
+  local_cv: string;
+  /** Shares held by foreign Commanditaire Vennootschap (CV) investors (shares) (numeric string) */
+  foreign_cv: string;
+  /** Shares held by Commanditaire Vennootschap (CV) investors, local_cv + foreign_cv (shares) (numeric string) */
   cv: string;
-  /** Shares held by Firm investors (shares) (numeric string) */
+  /** Shares held by domestic Firm investors (shares) (numeric string) */
+  local_fm: string;
+  /** Shares held by foreign Firm investors (shares) (numeric string) */
+  foreign_fm: string;
+  /** Shares held by Firm investors, local_fm + foreign_fm (shares) (numeric string) */
   fm: string;
-  /** Shares held by Mutual Fund Selling Agent investors (shares) (numeric string) */
+  /** Shares held by domestic Mutual Fund Selling Agent investors (shares) (numeric string) */
+  local_sa: string;
+  /** Shares held by foreign Mutual Fund Selling Agent investors (shares) (numeric string) */
+  foreign_sa: string;
+  /** Shares held by Mutual Fund Selling Agent investors, local_sa + foreign_sa (shares) (numeric string) */
   sa: string;
-  /** Shares held by Peer to Peer Lending investors (shares) (numeric string) */
+  /** Shares held by domestic Peer to Peer Lending investors (shares) (numeric string) */
+  local_pp: string;
+  /** Shares held by foreign Peer to Peer Lending investors (shares) (numeric string) */
+  foreign_pp: string;
+  /** Shares held by Peer to Peer Lending investors, local_pp + foreign_pp (shares) (numeric string) */
   pp: string;
-  /** Shares held by Permanent Establishment investors (shares) (numeric string) */
+  /** Shares held by domestic Permanent Establishment investors (shares) (numeric string) */
+  local_ps: string;
+  /** Shares held by foreign Permanent Establishment investors (shares) (numeric string) */
+  foreign_ps: string;
+  /** Shares held by Permanent Establishment investors, local_ps + foreign_ps (shares) (numeric string) */
   ps: string;
-  /** Shares held by Sole Proprietorship investors (shares) (numeric string) */
+  /** Shares held by domestic Sole Proprietorship investors (shares) (numeric string) */
+  local_sp: string;
+  /** Shares held by foreign Sole Proprietorship investors (shares) (numeric string) */
+  foreign_sp: string;
+  /** Shares held by Sole Proprietorship investors, local_sp + foreign_sp (shares) (numeric string) */
   sp: string;
-  /** Shares held by Corporate investors (shares) (numeric string) */
+  /** Shares held by domestic Corporate investors (shares) (numeric string) */
+  local_cr: string;
+  /** Shares held by foreign Corporate investors (shares) (numeric string) */
+  foreign_cr: string;
+  /** Shares held by Corporate investors, local_cr + foreign_cr (shares) (numeric string) */
   cr: string;
-  /** Shares held by Association / Social Organization investors (shares) (numeric string) */
+  /** Shares held by domestic Association / Social Organization investors (shares) (numeric string) */
+  local_as: string;
+  /** Shares held by foreign Association / Social Organization investors (shares) (numeric string) */
+  foreign_as: string;
+  /** Shares held by Association / Social Organization investors, local_as + foreign_as (shares) (numeric string) */
   as: string;
-  /** Shares held by State-Owned Enterprise (BUMN) investors (shares) (numeric string) */
+  /** Shares held by domestic State-Owned Enterprise (BUMN) investors (shares) (numeric string) */
+  local_so: string;
+  /** Shares held by foreign State-Owned Enterprise (BUMN) investors (shares) (numeric string) */
+  foreign_so: string;
+  /** Shares held by State-Owned Enterprise (BUMN) investors, local_so + foreign_so (shares) (numeric string) */
   so: string;
-  /** Shares held by Central Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Central Bank investors (shares) (numeric string) */
+  local_cb: string;
+  /** Shares held by foreign Central Bank investors (shares) (numeric string) */
+  foreign_cb: string;
+  /** Shares held by Central Bank investors, local_cb + foreign_cb (shares) (numeric string) */
   cb: string;
-  /** Shares held by State-Owned Company investors (shares) (numeric string) */
+  /** Shares held by domestic State-Owned Company investors (shares) (numeric string) */
+  local_oc: string;
+  /** Shares held by foreign State-Owned Company investors (shares) (numeric string) */
+  foreign_oc: string;
+  /** Shares held by State-Owned Company investors, local_oc + foreign_oc (shares) (numeric string) */
   oc: string;
-  /** Shares held by Diocese investors (shares) (numeric string) */
+  /** Shares held by domestic Diocese investors (shares) (numeric string) */
+  local_dc: string;
+  /** Shares held by foreign Diocese investors (shares) (numeric string) */
+  foreign_dc: string;
+  /** Shares held by Diocese investors, local_dc + foreign_dc (shares) (numeric string) */
   dc: string;
-  /** Shares held by Conference investors (shares) (numeric string) */
+  /** Shares held by domestic Conference investors (shares) (numeric string) */
+  local_cn: string;
+  /** Shares held by foreign Conference investors (shares) (numeric string) */
+  foreign_cn: string;
+  /** Shares held by Conference investors, local_cn + foreign_cn (shares) (numeric string) */
   cn: string;
-  /** Shares held by Congregation investors (shares) (numeric string) */
+  /** Shares held by domestic Congregation investors (shares) (numeric string) */
+  local_cg: string;
+  /** Shares held by foreign Congregation investors (shares) (numeric string) */
+  foreign_cg: string;
+  /** Shares held by Congregation investors, local_cg + foreign_cg (shares) (numeric string) */
   cg: string;
-  /** Shares held by Cooperative investors (shares) (numeric string) */
+  /** Shares held by domestic Cooperative investors (shares) (numeric string) */
+  local_cp: string;
+  /** Shares held by foreign Cooperative investors (shares) (numeric string) */
+  foreign_cp: string;
+  /** Shares held by Cooperative investors, local_cp + foreign_cp (shares) (numeric string) */
   cp: string;
-  /** Shares held by International Organization investors (shares) (numeric string) */
+  /** Shares held by domestic International Organization investors (shares) (numeric string) */
+  local_io: string;
+  /** Shares held by foreign International Organization investors (shares) (numeric string) */
+  foreign_io: string;
+  /** Shares held by International Organization investors, local_io + foreign_io (shares) (numeric string) */
   io: string;
-  /** Shares held by Political Party investors (shares) (numeric string) */
+  /** Shares held by domestic Political Party investors (shares) (numeric string) */
+  local_pl: string;
+  /** Shares held by foreign Political Party investors (shares) (numeric string) */
+  foreign_pl: string;
+  /** Shares held by Political Party investors, local_pl + foreign_pl (shares) (numeric string) */
   pl: string;
-  /** Shares held by Partnership investors (shares) (numeric string) */
+  /** Shares held by domestic Partnership investors (shares) (numeric string) */
+  local_pt: string;
+  /** Shares held by foreign Partnership investors (shares) (numeric string) */
+  foreign_pt: string;
+  /** Shares held by Partnership investors, local_pt + foreign_pt (shares) (numeric string) */
   pt: string;
-  /** Shares held by Educational Institution investors (shares) (numeric string) */
+  /** Shares held by domestic Educational Institution investors (shares) (numeric string) */
+  local_ed: string;
+  /** Shares held by foreign Educational Institution investors (shares) (numeric string) */
+  foreign_ed: string;
+  /** Shares held by Educational Institution investors, local_ed + foreign_ed (shares) (numeric string) */
   ed: string;
-  /** Shares held by Mutual Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Mutual Fund investors (shares) (numeric string) */
+  local_mf: string;
+  /** Shares held by foreign Mutual Fund investors (shares) (numeric string) */
+  foreign_mf: string;
+  /** Shares held by Mutual Fund investors, local_mf + foreign_mf (shares) (numeric string) */
   mf: string;
-  /** Shares held by Securities Company investors (shares) (numeric string) */
+  /** Shares held by domestic Securities Company investors (shares) (numeric string) */
+  local_sc: string;
+  /** Shares held by foreign Securities Company investors (shares) (numeric string) */
+  foreign_sc: string;
+  /** Shares held by Securities Company investors, local_sc + foreign_sc (shares) (numeric string) */
   sc: string;
-  /** Shares held by Pension Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Pension Fund investors (shares) (numeric string) */
+  local_pf: string;
+  /** Shares held by foreign Pension Fund investors (shares) (numeric string) */
+  foreign_pf: string;
+  /** Shares held by Pension Fund investors, local_pf + foreign_pf (shares) (numeric string) */
   pf: string;
-  /** Shares held by Financial Institution investors (shares) (numeric string) */
+  /** Shares held by domestic Financial Institution investors (shares) (numeric string) */
+  local_ib: string;
+  /** Shares held by foreign Financial Institution investors (shares) (numeric string) */
+  foreign_ib: string;
+  /** Shares held by Financial Institution investors, local_ib + foreign_ib (shares) (numeric string) */
   ib: string;
-  /** Shares held by Insurance investors (shares) (numeric string) */
+  /** Shares held by domestic Insurance investors (shares) (numeric string) */
+  local_is: string;
+  /** Shares held by foreign Insurance investors (shares) (numeric string) */
+  foreign_is: string;
+  /** Shares held by Insurance investors, local_is + foreign_is (shares) (numeric string) */
   is: string;
-  /** Shares held by Foundation investors (shares) (numeric string) */
+  /** Shares held by domestic Foundation investors (shares) (numeric string) */
+  local_fd: string;
+  /** Shares held by foreign Foundation investors (shares) (numeric string) */
+  foreign_fd: string;
+  /** Shares held by Foundation investors, local_fd + foreign_fd (shares) (numeric string) */
   fd: string;
-  /** Shares held by Individual investors (shares) (numeric string) */
+  /** Shares held by domestic Individual investors (shares) (numeric string) */
+  local_in: string;
+  /** Shares held by foreign Individual investors (shares) (numeric string) */
+  foreign_in: string;
+  /** Shares held by Individual investors, local_in + foreign_in (shares) (numeric string) */
   in: string;
+  /** Total shares held by foreign investors (shares) (numeric string) */
+  total_foreign: string;
+  /** Total shares held by domestic investors (shares) (numeric string) */
+  total_local: string;
   /** Total shares across all classifications (shares) (numeric string) */
   total: string;
 }
@@ -1054,86 +1216,285 @@ export interface ShareholderClassificationItem {
 export interface ShareholderClassifyTableResponse {
   /** Stock code */
   code: string;
-  /** Shares held by Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Bank investors (shares) (numeric string) */
+  local_bk: string;
+  /** Shares held by foreign Bank investors (shares) (numeric string) */
+  foreign_bk: string;
+  /** Shares held by Bank investors, local_bk + foreign_bk (shares) (numeric string) */
   bk: string;
-  /** Shares held by Government investors (shares) (numeric string) */
+  /** Shares held by domestic Government investors (shares) (numeric string) */
+  local_gv: string;
+  /** Shares held by foreign Government investors (shares) (numeric string) */
+  foreign_gv: string;
+  /** Shares held by Government investors, local_gv + foreign_gv (shares) (numeric string) */
   gv: string;
-  /** Shares held by Private Equity investors (shares) (numeric string) */
+  /** Shares held by domestic Private Equity investors (shares) (numeric string) */
+  local_pe: string;
+  /** Shares held by foreign Private Equity investors (shares) (numeric string) */
+  foreign_pe: string;
+  /** Shares held by Private Equity investors, local_pe + foreign_pe (shares) (numeric string) */
   pe: string;
-  /** Shares held by Trustee Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Trustee Bank investors (shares) (numeric string) */
+  local_tb: string;
+  /** Shares held by foreign Trustee Bank investors (shares) (numeric string) */
+  foreign_tb: string;
+  /** Shares held by Trustee Bank investors, local_tb + foreign_tb (shares) (numeric string) */
   tb: string;
-  /** Shares held by Venture Capital investors (shares) (numeric string) */
+  /** Shares held by domestic Venture Capital investors (shares) (numeric string) */
+  local_vc: string;
+  /** Shares held by foreign Venture Capital investors (shares) (numeric string) */
+  foreign_vc: string;
+  /** Shares held by Venture Capital investors, local_vc + foreign_vc (shares) (numeric string) */
   vc: string;
-  /** Shares held by Private Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Private Bank investors (shares) (numeric string) */
+  local_pb: string;
+  /** Shares held by foreign Private Bank investors (shares) (numeric string) */
+  foreign_pb: string;
+  /** Shares held by Private Bank investors, local_pb + foreign_pb (shares) (numeric string) */
   pb: string;
-  /** Shares held by Exchange Traded Fund (ETF) investors (shares) (numeric string) */
+  /** Shares held by domestic Exchange Traded Fund (ETF) investors (shares) (numeric string) */
+  local_ef: string;
+  /** Shares held by foreign Exchange Traded Fund (ETF) investors (shares) (numeric string) */
+  foreign_ef: string;
+  /** Shares held by Exchange Traded Fund (ETF) investors, local_ef + foreign_ef (shares) (numeric string) */
   ef: string;
-  /** Shares held by Investment Manager investors (shares) (numeric string) */
+  /** Shares held by domestic Investment Manager investors (shares) (numeric string) */
+  local_im: string;
+  /** Shares held by foreign Investment Manager investors (shares) (numeric string) */
+  foreign_im: string;
+  /** Shares held by Investment Manager investors, local_im + foreign_im (shares) (numeric string) */
   im: string;
-  /** Shares held by Investment Advisor investors (shares) (numeric string) */
+  /** Shares held by domestic Investment Advisor investors (shares) (numeric string) */
+  local_ia: string;
+  /** Shares held by foreign Investment Advisor investors (shares) (numeric string) */
+  foreign_ia: string;
+  /** Shares held by Investment Advisor investors, local_ia + foreign_ia (shares) (numeric string) */
   ia: string;
-  /** Shares held by Brokerage Firm investors (shares) (numeric string) */
+  /** Shares held by domestic Brokerage Firm investors (shares) (numeric string) */
+  local_br: string;
+  /** Shares held by foreign Brokerage Firm investors (shares) (numeric string) */
+  foreign_br: string;
+  /** Shares held by Brokerage Firm investors, local_br + foreign_br (shares) (numeric string) */
   br: string;
-  /** Shares held by Hedge Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Hedge Fund investors (shares) (numeric string) */
+  local_hf: string;
+  /** Shares held by foreign Hedge Fund investors (shares) (numeric string) */
+  foreign_hf: string;
+  /** Shares held by Hedge Fund investors, local_hf + foreign_hf (shares) (numeric string) */
   hf: string;
-  /** Shares held by Sovereign Wealth Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Sovereign Wealth Fund investors (shares) (numeric string) */
+  local_sw: string;
+  /** Shares held by foreign Sovereign Wealth Fund investors (shares) (numeric string) */
+  foreign_sw: string;
+  /** Shares held by Sovereign Wealth Fund investors, local_sw + foreign_sw (shares) (numeric string) */
   sw: string;
-  /** Shares held by Capital Market Supporting Institution investors (shares) (numeric string) */
+  /** Shares held by domestic Capital Market Supporting Institution investors (shares) (numeric string) */
+  local_cm: string;
+  /** Shares held by foreign Capital Market Supporting Institution investors (shares) (numeric string) */
+  foreign_cm: string;
+  /** Shares held by Capital Market Supporting Institution investors, local_cm + foreign_cm (shares) (numeric string) */
   cm: string;
-  /** Shares held by Commanditaire Vennootschap (CV) investors (shares) (numeric string) */
+  /** Shares held by domestic Commanditaire Vennootschap (CV) investors (shares) (numeric string) */
+  local_cv: string;
+  /** Shares held by foreign Commanditaire Vennootschap (CV) investors (shares) (numeric string) */
+  foreign_cv: string;
+  /** Shares held by Commanditaire Vennootschap (CV) investors, local_cv + foreign_cv (shares) (numeric string) */
   cv: string;
-  /** Shares held by Firm investors (shares) (numeric string) */
+  /** Shares held by domestic Firm investors (shares) (numeric string) */
+  local_fm: string;
+  /** Shares held by foreign Firm investors (shares) (numeric string) */
+  foreign_fm: string;
+  /** Shares held by Firm investors, local_fm + foreign_fm (shares) (numeric string) */
   fm: string;
-  /** Shares held by Mutual Fund Selling Agent investors (shares) (numeric string) */
+  /** Shares held by domestic Mutual Fund Selling Agent investors (shares) (numeric string) */
+  local_sa: string;
+  /** Shares held by foreign Mutual Fund Selling Agent investors (shares) (numeric string) */
+  foreign_sa: string;
+  /** Shares held by Mutual Fund Selling Agent investors, local_sa + foreign_sa (shares) (numeric string) */
   sa: string;
-  /** Shares held by Peer to Peer Lending investors (shares) (numeric string) */
+  /** Shares held by domestic Peer to Peer Lending investors (shares) (numeric string) */
+  local_pp: string;
+  /** Shares held by foreign Peer to Peer Lending investors (shares) (numeric string) */
+  foreign_pp: string;
+  /** Shares held by Peer to Peer Lending investors, local_pp + foreign_pp (shares) (numeric string) */
   pp: string;
-  /** Shares held by Permanent Establishment investors (shares) (numeric string) */
+  /** Shares held by domestic Permanent Establishment investors (shares) (numeric string) */
+  local_ps: string;
+  /** Shares held by foreign Permanent Establishment investors (shares) (numeric string) */
+  foreign_ps: string;
+  /** Shares held by Permanent Establishment investors, local_ps + foreign_ps (shares) (numeric string) */
   ps: string;
-  /** Shares held by Sole Proprietorship investors (shares) (numeric string) */
+  /** Shares held by domestic Sole Proprietorship investors (shares) (numeric string) */
+  local_sp: string;
+  /** Shares held by foreign Sole Proprietorship investors (shares) (numeric string) */
+  foreign_sp: string;
+  /** Shares held by Sole Proprietorship investors, local_sp + foreign_sp (shares) (numeric string) */
   sp: string;
-  /** Shares held by Corporate investors (shares) (numeric string) */
+  /** Shares held by domestic Corporate investors (shares) (numeric string) */
+  local_cr: string;
+  /** Shares held by foreign Corporate investors (shares) (numeric string) */
+  foreign_cr: string;
+  /** Shares held by Corporate investors, local_cr + foreign_cr (shares) (numeric string) */
   cr: string;
-  /** Shares held by Association / Social Organization investors (shares) (numeric string) */
+  /** Shares held by domestic Association / Social Organization investors (shares) (numeric string) */
+  local_as: string;
+  /** Shares held by foreign Association / Social Organization investors (shares) (numeric string) */
+  foreign_as: string;
+  /** Shares held by Association / Social Organization investors, local_as + foreign_as (shares) (numeric string) */
   as: string;
-  /** Shares held by State-Owned Enterprise (BUMN) investors (shares) (numeric string) */
+  /** Shares held by domestic State-Owned Enterprise (BUMN) investors (shares) (numeric string) */
+  local_so: string;
+  /** Shares held by foreign State-Owned Enterprise (BUMN) investors (shares) (numeric string) */
+  foreign_so: string;
+  /** Shares held by State-Owned Enterprise (BUMN) investors, local_so + foreign_so (shares) (numeric string) */
   so: string;
-  /** Shares held by Central Bank investors (shares) (numeric string) */
+  /** Shares held by domestic Central Bank investors (shares) (numeric string) */
+  local_cb: string;
+  /** Shares held by foreign Central Bank investors (shares) (numeric string) */
+  foreign_cb: string;
+  /** Shares held by Central Bank investors, local_cb + foreign_cb (shares) (numeric string) */
   cb: string;
-  /** Shares held by State-Owned Company investors (shares) (numeric string) */
+  /** Shares held by domestic State-Owned Company investors (shares) (numeric string) */
+  local_oc: string;
+  /** Shares held by foreign State-Owned Company investors (shares) (numeric string) */
+  foreign_oc: string;
+  /** Shares held by State-Owned Company investors, local_oc + foreign_oc (shares) (numeric string) */
   oc: string;
-  /** Shares held by Diocese investors (shares) (numeric string) */
+  /** Shares held by domestic Diocese investors (shares) (numeric string) */
+  local_dc: string;
+  /** Shares held by foreign Diocese investors (shares) (numeric string) */
+  foreign_dc: string;
+  /** Shares held by Diocese investors, local_dc + foreign_dc (shares) (numeric string) */
   dc: string;
-  /** Shares held by Conference investors (shares) (numeric string) */
+  /** Shares held by domestic Conference investors (shares) (numeric string) */
+  local_cn: string;
+  /** Shares held by foreign Conference investors (shares) (numeric string) */
+  foreign_cn: string;
+  /** Shares held by Conference investors, local_cn + foreign_cn (shares) (numeric string) */
   cn: string;
-  /** Shares held by Congregation investors (shares) (numeric string) */
+  /** Shares held by domestic Congregation investors (shares) (numeric string) */
+  local_cg: string;
+  /** Shares held by foreign Congregation investors (shares) (numeric string) */
+  foreign_cg: string;
+  /** Shares held by Congregation investors, local_cg + foreign_cg (shares) (numeric string) */
   cg: string;
-  /** Shares held by Cooperative investors (shares) (numeric string) */
+  /** Shares held by domestic Cooperative investors (shares) (numeric string) */
+  local_cp: string;
+  /** Shares held by foreign Cooperative investors (shares) (numeric string) */
+  foreign_cp: string;
+  /** Shares held by Cooperative investors, local_cp + foreign_cp (shares) (numeric string) */
   cp: string;
-  /** Shares held by International Organization investors (shares) (numeric string) */
+  /** Shares held by domestic International Organization investors (shares) (numeric string) */
+  local_io: string;
+  /** Shares held by foreign International Organization investors (shares) (numeric string) */
+  foreign_io: string;
+  /** Shares held by International Organization investors, local_io + foreign_io (shares) (numeric string) */
   io: string;
-  /** Shares held by Political Party investors (shares) (numeric string) */
+  /** Shares held by domestic Political Party investors (shares) (numeric string) */
+  local_pl: string;
+  /** Shares held by foreign Political Party investors (shares) (numeric string) */
+  foreign_pl: string;
+  /** Shares held by Political Party investors, local_pl + foreign_pl (shares) (numeric string) */
   pl: string;
-  /** Shares held by Partnership investors (shares) (numeric string) */
+  /** Shares held by domestic Partnership investors (shares) (numeric string) */
+  local_pt: string;
+  /** Shares held by foreign Partnership investors (shares) (numeric string) */
+  foreign_pt: string;
+  /** Shares held by Partnership investors, local_pt + foreign_pt (shares) (numeric string) */
   pt: string;
-  /** Shares held by Educational Institution investors (shares) (numeric string) */
+  /** Shares held by domestic Educational Institution investors (shares) (numeric string) */
+  local_ed: string;
+  /** Shares held by foreign Educational Institution investors (shares) (numeric string) */
+  foreign_ed: string;
+  /** Shares held by Educational Institution investors, local_ed + foreign_ed (shares) (numeric string) */
   ed: string;
-  /** Shares held by Mutual Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Mutual Fund investors (shares) (numeric string) */
+  local_mf: string;
+  /** Shares held by foreign Mutual Fund investors (shares) (numeric string) */
+  foreign_mf: string;
+  /** Shares held by Mutual Fund investors, local_mf + foreign_mf (shares) (numeric string) */
   mf: string;
-  /** Shares held by Securities Company investors (shares) (numeric string) */
+  /** Shares held by domestic Securities Company investors (shares) (numeric string) */
+  local_sc: string;
+  /** Shares held by foreign Securities Company investors (shares) (numeric string) */
+  foreign_sc: string;
+  /** Shares held by Securities Company investors, local_sc + foreign_sc (shares) (numeric string) */
   sc: string;
-  /** Shares held by Pension Fund investors (shares) (numeric string) */
+  /** Shares held by domestic Pension Fund investors (shares) (numeric string) */
+  local_pf: string;
+  /** Shares held by foreign Pension Fund investors (shares) (numeric string) */
+  foreign_pf: string;
+  /** Shares held by Pension Fund investors, local_pf + foreign_pf (shares) (numeric string) */
   pf: string;
-  /** Shares held by Financial Institution investors (shares) (numeric string) */
+  /** Shares held by domestic Financial Institution investors (shares) (numeric string) */
+  local_ib: string;
+  /** Shares held by foreign Financial Institution investors (shares) (numeric string) */
+  foreign_ib: string;
+  /** Shares held by Financial Institution investors, local_ib + foreign_ib (shares) (numeric string) */
   ib: string;
-  /** Shares held by Insurance investors (shares) (numeric string) */
+  /** Shares held by domestic Insurance investors (shares) (numeric string) */
+  local_is: string;
+  /** Shares held by foreign Insurance investors (shares) (numeric string) */
+  foreign_is: string;
+  /** Shares held by Insurance investors, local_is + foreign_is (shares) (numeric string) */
   is: string;
-  /** Shares held by Foundation investors (shares) (numeric string) */
+  /** Shares held by domestic Foundation investors (shares) (numeric string) */
+  local_fd: string;
+  /** Shares held by foreign Foundation investors (shares) (numeric string) */
+  foreign_fd: string;
+  /** Shares held by Foundation investors, local_fd + foreign_fd (shares) (numeric string) */
   fd: string;
-  /** Shares held by Individual investors (shares) (numeric string) */
+  /** Shares held by domestic Individual investors (shares) (numeric string) */
+  local_in: string;
+  /** Shares held by foreign Individual investors (shares) (numeric string) */
+  foreign_in: string;
+  /** Shares held by Individual investors, local_in + foreign_in (shares) (numeric string) */
   in: string;
+  /** Total shares held by foreign investors (shares) (numeric string) */
+  total_foreign: string;
+  /** Total shares held by domestic investors (shares) (numeric string) */
+  total_local: string;
   /** Total shares across all classifications (shares) (numeric string) */
   total: string;
+}
+
+export interface FreeFloatItem {
+  /** Stock code */
+  code: string;
+  /** Data date; WIB wall-clock DateTime with a literal Z suffix (not UTC), e.g. 2026-10-16T00:00:00.000Z */
+  date: string;
+  /** Scripless shares held by all shareholders with less than 5% (shares) (numeric string) */
+  public: string;
+  /** Scripless shares held by the Board of Directors and Commissioners, less than 5% (shares) (numeric string) */
+  management: string;
+  /** Scripless shares held by the Controller, less than 5% (shares) (numeric string) */
+  controller: string;
+  /** Scripless shares held by Affiliates of the Controller, less than 5% (shares) (numeric string) */
+  affiliate: string;
+  /** Scripless treasury shares, less than 5% (shares) (numeric string) */
+  treasury: string;
+  /** Shares under a transfer restriction (lock up), less than 5% (shares) (numeric string) */
+  lock_up: string;
+  /** Scripless shares held by Venture Capital and Private Equity firms, less than 5% (shares) (numeric string) */
+  private: string;
+  /** Scripless shares seized or blocked by law enforcement or a competent authority, less than 5% (shares) (numeric string) */
+  law: string;
+  /** Shares whose beneficial owners are public investors approved by the Exchange to count as Free Float (shares) (numeric string) */
+  other: string;
+  /** Free Float shares (shares) (numeric string) */
+  total: string;
+  /** Shares listed on the Exchange at month end (shares) (numeric string) */
+  share: string;
+  /** Free Float percentage (%) */
+  free: number;
+  /** Unlisted shares, previous month (shares) (numeric string); null if absent */
+  not_record_value_prev: string | null;
+  /** Unlisted shares percentage, previous month (%); null if absent */
+  not_record_pct_prev: number | null;
+  /** Unlisted shares, current month (shares) (numeric string); null if absent */
+  not_record_value_next: string | null;
+  /** Unlisted shares percentage, current month (%); null if absent */
+  not_record_pct_next: number | null;
 }
 
 export interface SummaryStockItem {
@@ -1796,6 +2157,54 @@ export interface KeystatChartPoints {
   label: string;
   /** Statistic value for the period (unit depends on the statistic); 0 when not reported or name unknown */
   amount: number;
+}
+
+export interface FlowOfFundsResponse {
+  columns: FlowOfFundsColumns[];
+  role: string;
+  sector: string;
+  currency: string;
+  periods: FlowOfFundsPeriods[];
+}
+
+export interface FlowOfFundsColumns {
+  label: string;
+  year: number;
+  period: string;
+}
+
+export interface FlowOfFundsPeriods {
+  label: string;
+  year: number;
+  period: string;
+  basis: "quarter" | "annual" | "ytd";
+  nodes: FlowOfFundsPeriodsNodes[];
+  links: FlowOfFundsPeriodsLinks[];
+  bridge: FlowOfFundsPeriodsBridge[];
+  checks: Record<string, unknown>;
+}
+
+export interface FlowOfFundsPeriodsNodes {
+  id: string;
+  concept: string | null;
+  label_id: string;
+  label_en: string;
+  kind: "revenue" | "cost" | "income" | "profit" | "loss" | "offset";
+  value: number;
+}
+
+export interface FlowOfFundsPeriodsLinks {
+  source: string;
+  target: string;
+  value: number;
+}
+
+export interface FlowOfFundsPeriodsBridge {
+  id: string;
+  label_id: string;
+  label_en: string;
+  kind: "total" | "delta";
+  value: number;
 }
 
 /** Paginated corporate-action calendar, newest event date first. */
@@ -2873,14 +3282,20 @@ export interface DisclosureResponse {
 
 /** One item of data */
 export interface DisclosureData {
+  /** Disclosure id */
+  id: string;
   /** Disclosure title */
   title: string;
-  /** Issuer stock code (empty string if not tagged) */
+  /** Issuer stock code */
   code: string;
   /** Publication time, WIB wall-clock in YYYY-MM-DDTHH:MM:SS format (no Z, no fraction), e.g. 2026-09-29T08:00:00 */
   date: string;
-  /** Disclosure type, e.g. public_expose (empty string if not tagged) */
+  /** Disclosure type (lowercase StockReportType), e.g. public_expose */
   type: string;
+  /** Disclosure description */
+  description: string | null;
+  /** Disclosure summary points */
+  summary: string[];
   /** Attachment files */
   list: DisclosureDataList[];
 }
@@ -2945,6 +3360,9 @@ export type ShareholderKSEIResponse = ShareholderKSEIItem[];
 
 /** Response of `GET /analysis/shareholder/classification/{code}`. */
 export type ShareholderClassificationResponse = ShareholderClassificationItem[];
+
+/** Response of `GET /analysis/free-float/{code}`. */
+export type FreeFloatResponse = FreeFloatItem[];
 
 /** Response of `GET /analysis/summary/stock/{code}`. */
 export type SummaryStockResponse = SummaryStockItem[];
@@ -3138,7 +3556,7 @@ export interface OrderBookParams {
   market: "RG" | "NG" | "TN";
   /** Tanggal order book historis (`YYYY-MM-DD`), tersedia mulai `2026-03-25`. Wajib dikirim bersama `time`; kosongkan keduanya untuk data realtime. Format: `YYYY-MM-DD`. Example: `2026-03-25`. */
   date?: string;
-  /** Jam snapshot order book dalam WIB, format `HH:mm` pada jam perdagangan (09:00–15:59). Wajib dikirim bersama `date`. Example: `09:30`. */
+  /** Jam snapshot order book dalam WIB, format `HH:mm` atau `HH:mm:ss` pada jam perdagangan (09:00–15:59); mengembalikan snapshot terdekat pada tanggal tersebut. Wajib dikirim bersama `date`. Example: `09:30`. */
   time?: string;
 }
 
@@ -3236,6 +3654,12 @@ export interface ShareholderKSEIParams {
 
 /** Query parameters for `GET /analysis/shareholder/classification/{code}`. */
 export interface ShareholderClassificationParams {
+  /** Jumlah bulan terakhir yang ditampilkan, mis. `6` untuk 6 bulan terakhir. Akun TRIAL dibatasi maksimal 12 bulan. Min: `1`. Max: `36`. Example: `6`. */
+  range: number;
+}
+
+/** Query parameters for `GET /analysis/free-float/{code}`. */
+export interface FreeFloatParams {
   /** Jumlah bulan terakhir yang ditampilkan, mis. `6` untuk 6 bulan terakhir. Akun TRIAL dibatasi maksimal 12 bulan. Min: `1`. Max: `36`. Example: `6`. */
   range: number;
 }
@@ -3582,6 +4006,14 @@ export interface KeystatChartParams {
   name: string;
 }
 
+/** Query parameters for `GET /analysis/flow-of-funds/{code}`. */
+export interface FlowOfFundsParams {
+  /** Periode laporan: `FY` = tahunan, `Q` = seluruh kuartal, `Q1`–`Q4` = kuartal tertentu. Example: `FY`. */
+  type: "FY" | "Q" | "Q1" | "Q2" | "Q3" | "Q4";
+  /** Jumlah periode terakhir yang ditampilkan. Default: `8`. Min: `1`. Max: `8`. Example: `8`. */
+  limit?: number;
+}
+
 /** Query parameters for `GET /analysis/calendar`. */
 export interface CalendarParams {
   /** Filter hasil untuk satu kode saham tertentu. Example: `BBCA`. */
@@ -3642,7 +4074,7 @@ export interface UsageLogsParams {
   to?: string;
   /** Filter log berdasarkan HTTP status code, mis. `200`, `422`, atau `429`. Min: `100`. Max: `599`. Example: `200`. */
   status?: number;
-  /** Jumlah log maksimal yang dikembalikan. Kosongkan untuk mengambil seluruh log. Min: `1`. Max: `320000`. Example: `100`. */
+  /** Jumlah log maksimal yang dikembalikan. Kosongkan untuk mengambil seluruh log. Min: `1`. Max: `520000`. Example: `100`. */
   limit?: number;
 }
 
@@ -3768,5 +4200,7 @@ export interface DisclosureParams {
   limit?: number;
   /** Filter kode saham, mis. `BBCA` (opsional). Example: `BBCA`. */
   code?: string;
+  /** Filter tipe laporan (opsional, huruf besar/kecil bebas). Example: `public_expose`. */
+  type?: "shareholder" | "financial" | "rups" | "volatility_explanation" | "press_release" | "public_expose" | "right_issue" | "dividen" | "ad_publication" | "use_of_proceeds" | "exchange_clarification" | "trading_suspension" | "operational_report" | "annual_report" | "financial_info" | "rating" | "structured_warrant" | "bond" | "management" | "buyback" | "ownership" | "capital_action" | "public_offering" | "material_transaction" | "agreement" | "corporate_group" | "articles_identity" | "legal" | "material_info" | "other";
 }
 

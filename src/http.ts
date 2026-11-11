@@ -1,7 +1,7 @@
 import { LruCache } from './cache';
 import { ConnectionError, InvezgoError, RateLimitError, TimeoutError, errorClassFor } from './errors';
 
-export const VERSION = '2.0.0';
+export const VERSION = '2.1.0';
 export const DEFAULT_BASE_URL = 'https://api.invezgo.com';
 
 /** Path segments holding per-account data; a successful mutation purges their cached GETs. */
