@@ -12,6 +12,7 @@ import {
   ServerError,
   TimeoutError,
   ConnectionError,
+  VERSION,
 } from '../dist/index.mjs';
 import cjs from '../dist/index.js';
 
@@ -68,7 +69,7 @@ test('sends auth, user agent, JSON body and canonical sorted query', async () =>
   const [a, b, w] = requests;
   assert.equal(a.url, '/analysis/chart/stock/bdm/BB%20CA%2F1?from=2024-12-01&to=2024-12-31');
   assert.equal(a.key, 'A');
-  assert.match(a.headers['user-agent'], /^invezgo-js-sdk\/2\.1\.0$/);
+  assert.equal(a.headers['user-agent'], `invezgo-js-sdk/${VERSION}`);
   assert.equal(a.headers['content-type'], undefined);
   assert.equal(b.url, '/analysis/top/change?date=2024-12-30&filter_value=1.5');
   assert.equal(w.method, 'POST');
