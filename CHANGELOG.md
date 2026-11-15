@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Webhook helpers (no client or API key needed, Web Crypto so they also run on edge runtimes): `verifyWebhook(rawBody, headers, secret, { tolerance, now })` checks the `X-Invezgo-Signature` HMAC-SHA256 in constant time and the `X-Invezgo-Timestamp` window (default 300 s); `parseWebhook(rawBody)`; `isWebhookEvent(event, name)` type guard; typed `data` for every documented event; `WebhookVerificationError` with `reason` `timestamp` | `signature` | `payload`.
+- Real-time WebSocket client (Elite plan): `client.realtime()` / `new InvezgoRealtime({ apiKey, url })` with `subscribeTrades`, `subscribeOrderbook`, `unsubscribe`, `ping`, `close` and typed events. Subscriptions are queued until `connected` and replayed after automatic reconnects (1–30 s backoff). Handshake 401/403 and close code 4400 stop reconnecting. Uses the global `WebSocket` on Node >= 22, or a `WebSocket` option such as the `ws` package.
+
 ## [2.1.0] - 2026-11-11
 
 Regenerated from the latest OpenAPI spec (Invezgo API 1.2, 109 endpoints).

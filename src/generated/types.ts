@@ -2,35 +2,35 @@
 /* eslint-disable */
 
 export interface ScreenRequest {
-  /** Formula untuk screening saham */
+  /** Formula untuk screening saham - Mengacu pada [Variabel Formula](https://docs.invezgo.com/features/formula-variables/) */
   formula: string;
   /** Kategori indeks saham yang ingin disaring (opsional, bisa multi seperti ["SYARIAH", "IDXENERGY"]) */
-  category?: string[] | null;
+  category?: Array<"COMPOSITE" | "SYARIAH" | "IDXENERGY" | "IDXBASIC" | "IDXINDUST" | "IDXNONCYC" | "IDXCYCLIC" | "IDXHEALTH" | "IDXFINANCE" | "IDXPROPERT" | "IDXTECHNO" | "IDXINFRA" | "IDXTRANS">;
 }
 
 export interface SaveScreenerRequest {
   name: string;
-  description?: string | null;
-  scope?: string[] | null;
+  description?: string;
+  scope?: string[];
   formula: string;
   /** Kategori indeks saham yang ingin disaring (opsional, bisa multi seperti ["SYARIAH", "IDXENERGY"]) */
-  category?: string[] | null;
+  category?: Array<"COMPOSITE" | "SYARIAH" | "IDXENERGY" | "IDXBASIC" | "IDXINDUST" | "IDXNONCYC" | "IDXCYCLIC" | "IDXHEALTH" | "IDXFINANCE" | "IDXPROPERT" | "IDXTECHNO" | "IDXINFRA" | "IDXTRANS">;
 }
 
 export interface UpdateScreenerRequest {
   name: string;
-  description?: string | null;
-  scope?: string[] | null;
+  description?: string;
+  scope?: string[];
   formula: string;
   /** Kategori indeks saham yang ingin disaring (opsional, bisa multi seperti ["SYARIAH", "IDXENERGY"]) */
-  category?: string[] | null;
+  category?: Array<"COMPOSITE" | "SYARIAH" | "IDXENERGY" | "IDXBASIC" | "IDXINDUST" | "IDXNONCYC" | "IDXCYCLIC" | "IDXHEALTH" | "IDXFINANCE" | "IDXPROPERT" | "IDXTECHNO" | "IDXINFRA" | "IDXTRANS">;
 }
 
 export interface AddWatchlistRequest {
   group: string;
   code: string;
   price: number;
-  note?: string | null;
+  note?: string;
   scope: string[];
 }
 
@@ -44,7 +44,7 @@ export interface UpdateWatchlistRequest {
 }
 
 export interface NoteRequest {
-  note?: string | null;
+  note?: string;
 }
 
 export interface AddJournalRequest {
@@ -54,47 +54,51 @@ export interface AddJournalRequest {
   lot: number;
   fee: number;
   price: number;
-  status?: string | null;
+  status?: "BUY" | "SELL";
   scope: string[];
-  note?: string | null;
+  note: string | null;
 }
 
 export interface NoteJournalRequest {
-  note?: string | null;
+  note?: string;
 }
 
 export interface AlertRequest {
   name: string;
-  description?: string | null;
+  description?: string;
   /** Kategori indeks saham yang ingin disaring (opsional, bisa multi seperti ["SYARIAH", "IDXENERGY"]) */
-  category?: string[] | null;
-  every: string;
-  send: string;
-  scope?: string[] | null;
-  /** Formula alert (sama dengan batas formula screener) */
+  category?: Array<"COMPOSITE" | "SYARIAH" | "IDXENERGY" | "IDXBASIC" | "IDXINDUST" | "IDXNONCYC" | "IDXCYCLIC" | "IDXHEALTH" | "IDXFINANCE" | "IDXPROPERT" | "IDXTECHNO" | "IDXINFRA" | "IDXTRANS">;
+  every: "FOURTY_FIVE_SECONDS" | "ONE_MINUTE" | "FIVE_MINUTES" | "TEN_MINUTES" | "THIRTY_MINUTES" | "ONE_HOUR" | "END_SESSION" | "END_OF_DAY";
+  send: "IN_OUT" | "IN" | "OUT";
+  scope?: string[];
+  /** Formula alert, maksimal 2048 karakter (sama dengan formula screener) */
   formula: string;
+  /** Tujuan pengiriman alert. TELEGRAM (default), WEBHOOK (webhook akun, domain `alert`), atau MCP (MCP Events untuk agen AI). WEBHOOK dan MCP membutuhkan paket PRIME, MAX, atau ELITE. */
+  channel?: "TELEGRAM" | "WEBHOOK" | "MCP";
 }
 
 export interface TestAlertRequest {
   formula: string;
   /** Kategori indeks saham yang ingin disaring (opsional, bisa multi seperti ["SYARIAH", "IDXENERGY"]) */
-  category?: string[] | null;
+  category?: Array<"COMPOSITE" | "SYARIAH" | "IDXENERGY" | "IDXBASIC" | "IDXINDUST" | "IDXNONCYC" | "IDXCYCLIC" | "IDXHEALTH" | "IDXFINANCE" | "IDXPROPERT" | "IDXTECHNO" | "IDXINFRA" | "IDXTRANS">;
 }
 
 export interface UpdateAlertRequest {
   name: string;
-  description?: string | null;
+  description?: string;
   /** Kategori indeks saham yang ingin disaring (opsional, bisa multi seperti ["SYARIAH", "IDXENERGY"]) */
-  category?: string[] | null;
-  every: string;
-  send: string;
-  /** Formula alert (sama dengan batas formula screener) */
+  category?: Array<"COMPOSITE" | "SYARIAH" | "IDXENERGY" | "IDXBASIC" | "IDXINDUST" | "IDXNONCYC" | "IDXCYCLIC" | "IDXHEALTH" | "IDXFINANCE" | "IDXPROPERT" | "IDXTECHNO" | "IDXINFRA" | "IDXTRANS">;
+  every: "FOURTY_FIVE_SECONDS" | "ONE_MINUTE" | "FIVE_MINUTES" | "TEN_MINUTES" | "THIRTY_MINUTES" | "ONE_HOUR" | "END_SESSION" | "END_OF_DAY";
+  send: "IN_OUT" | "IN" | "OUT";
+  /** Formula alert, maksimal 2048 karakter (sama dengan formula screener) */
   formula: string;
-  scope?: string[] | null;
+  scope?: string[];
+  /** Tujuan pengiriman alert. TELEGRAM (default), WEBHOOK (webhook akun, domain `alert`), atau MCP (MCP Events untuk agen AI). WEBHOOK dan MCP membutuhkan paket PRIME, MAX, atau ELITE. Jika tidak dikirim, channel alert tidak berubah. */
+  channel?: "TELEGRAM" | "WEBHOOK" | "MCP";
 }
 
 export interface NoteTradeRequest {
-  note?: string | null;
+  note?: string;
 }
 
 export interface DeleteIdsRequest {
@@ -612,6 +616,8 @@ export interface IntradayChartItem {
 export interface OrderBookResponse {
   /** Stock code; carries the market suffix when market is not RG (e.g. BBCANG) */
   code: string;
+  /** Time of the data in WIB (UTC+7), not UTC. Live data shows when it was retrieved; stored data shows when it was recorded. Null when no data is available. */
+  date: string | null;
   /** Buy queue levels, ordered from level 1 (best bid) */
   bid: Array<Record<string, number | null>>;
   /** Sell queue levels, ordered from level 1 (best offer) */
@@ -640,6 +646,8 @@ export interface OrderQueueItem {
 export interface IntradayDataResponse {
   /** Stock code (without market suffix) */
   code: string;
+  /** Time of the data in WIB (UTC+7), not UTC. Live data shows when it was retrieved; stored data shows when it was recorded, or 16:15 (market close) for daily data. Null when no data is available. */
+  date: string | null;
   /** Opening price (Rupiah) */
   open: number | null;
   /** Highest price (Rupiah) */
@@ -680,6 +688,8 @@ export interface IntradayDataResponse {
 export interface IntradayIndexResponse {
   /** Index code */
   code: string;
+  /** Time of the data in WIB (UTC+7), not UTC. Live data shows when it was retrieved; stored data shows 16:15 (market close) of that trading day. Null when no data is available. */
+  date: string | null;
   /** Index opening value; may be a numeric string outside trading hours */
   open: number | string | null;
   /** Index highest value; may be a numeric string outside trading hours */
@@ -2232,6 +2242,8 @@ export interface CalendarData {
 export interface BatchOrderBookItem {
   /** Stock code; may carry the market suffix when market is not RG (e.g. BBCANG); empty string when not available */
   code: string;
+  /** Time of the data in WIB (UTC+7), not UTC. Live data shows when it was retrieved; stored data shows when it was recorded. Null when no data is available. */
+  date: string | null;
   /** Buy queue levels, ordered from level 1 (best bid) */
   bid: Array<Record<string, number | null>>;
   /** Sell queue levels, ordered from level 1 (best offer) */
@@ -2241,6 +2253,8 @@ export interface BatchOrderBookItem {
 export interface BatchIntradayDataItem {
   /** Stock code (carries the market suffix when market is not RG) */
   code: string;
+  /** Time of the data in WIB (UTC+7), not UTC. Live data shows when it was retrieved; stored data shows 16:15 (market close) of that trading day. Null when no data is available. */
+  date: string | null;
   /** Opening price (Rupiah) */
   open: number | null;
   /** Highest price (Rupiah) */
@@ -2280,6 +2294,8 @@ export interface BatchIntradayDataItem {
 export interface BatchIntradayIndexItem {
   /** Index code */
   code: string;
+  /** Time of the data in WIB (UTC+7), not UTC. Live data shows when it was retrieved; stored data shows 16:15 (market close) of that trading day. Null when no data is available. */
+  date: string | null;
   /** Index opening value */
   open: number | null;
   /** Index highest value */

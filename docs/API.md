@@ -1263,11 +1263,11 @@ Batch endpoints: fetch many stocks in one request (counted as 1 request).
 client.batch.getOrderBook(code: string, params?: BatchOrderBookParams, options?: RequestOptions): Promise<BatchOrderBookResponse>
 ```
 
-Get order book data for multiple stocks at once in a single request (up to 10 codes on the MAX plan, 25 on the ELITE plan).
+Get order book data for multiple stocks at once in a single request (up to 20 codes on the MAX plan, 50 on the ELITE plan).
 
 | Parameter | Lokasi | Tipe | Wajib | Default | Keterangan |
 |---|---|---|---|---|---|
-| `code` | path | `string` | ya |  | Daftar kode saham yang dipisahkan `\|` atau koma, mis. `BBCA\|GOTO\|TLKM`. Maksimal 10 kode (paket MAX) atau 25 kode (paket ELITE) per request. |
+| `code` | path | `string` | ya |  | Daftar kode saham yang dipisahkan `\|` atau koma, mis. `BBCA\|GOTO\|TLKM`. Maksimal 20 kode (paket MAX) atau 50 kode (paket ELITE) per request. |
 | `market` | query | `"RG" \| "NG" \| "TN"` | tidak | `RG` | Jenis pasar: `RG` = Pasar Reguler, `NG` = Pasar Negosiasi, `TN` = Pasar Tunai. Gunakan `RG` untuk analisis pergerakan harga pada umumnya. Default `RG` bila tidak diisi. |
 | `date` | query | `string` | tidak |  | Tanggal order book historis (`YYYY-MM-DD`), data tersedia mulai `2026-03-25`. Kirim bersama `time`; kosongkan keduanya untuk data realtime. |
 | `time` | query | `string` | tidak |  | Jam order book dalam WIB, format `HH:mm` dengan presisi menit. Kirim bersama `date`. |
@@ -1282,11 +1282,11 @@ Return: `BatchOrderBookResponse`
 client.batch.getIntradayData(code: string, params?: BatchIntradayDataParams, options?: RequestOptions): Promise<BatchIntradayDataResponse>
 ```
 
-Get compact intraday price data for multiple stocks at once in a single request (up to 10 codes on the MAX plan, 25 on the ELITE plan).
+Get compact intraday price data for multiple stocks at once in a single request (up to 20 codes on the MAX plan, 50 on the ELITE plan).
 
 | Parameter | Lokasi | Tipe | Wajib | Default | Keterangan |
 |---|---|---|---|---|---|
-| `code` | path | `string` | ya |  | Daftar kode saham yang dipisahkan `\|` atau koma, mis. `BBCA\|GOTO\|TLKM`. Maksimal 10 kode (paket MAX) atau 25 kode (paket ELITE) per request. |
+| `code` | path | `string` | ya |  | Daftar kode saham yang dipisahkan `\|` atau koma, mis. `BBCA\|GOTO\|TLKM`. Maksimal 20 kode (paket MAX) atau 50 kode (paket ELITE) per request. |
 | `market` | query | `"RG" \| "NG" \| "TN"` | tidak | `RG` | Jenis pasar: `RG` = Pasar Reguler, `NG` = Pasar Negosiasi, `TN` = Pasar Tunai. Gunakan `RG` untuk analisis pergerakan harga pada umumnya. Default `RG` bila tidak diisi. |
 | `date` | query | `string` | tidak |  | Tanggal data historis (`YYYY-MM-DD`). Kosongkan untuk data realtime hari ini. |
 
@@ -1300,11 +1300,11 @@ Return: `BatchIntradayDataResponse`
 client.batch.getIntradayIndex(code: string, options?: RequestOptions): Promise<BatchIntradayIndexResponse>
 ```
 
-Get compact intraday data for multiple indexes at once in a single request (up to 10 codes on the MAX plan, 25 on the ELITE plan).
+Get compact intraday data for multiple indexes at once in a single request (up to 20 codes on the MAX plan, 50 on the ELITE plan).
 
 | Parameter | Lokasi | Tipe | Wajib | Default | Keterangan |
 |---|---|---|---|---|---|
-| `code` | path | `string` | ya |  | Daftar kode indeks yang dipisahkan `\|` atau koma, mis. `COMPOSITE\|LQ45\|IDX30`. Maksimal 10 kode (paket MAX) atau 25 kode (paket ELITE) per request. Daftar indeks tersedia di `/analysis/list/index`. |
+| `code` | path | `string` | ya |  | Daftar kode indeks yang dipisahkan `\|` atau koma, mis. `COMPOSITE\|LQ45\|IDX30`. Maksimal 20 kode (paket MAX) atau 50 kode (paket ELITE) per request. Daftar indeks tersedia di `/analysis/list/index`. |
 
 Return: `BatchIntradayIndexResponse`
 

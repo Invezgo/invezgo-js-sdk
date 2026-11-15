@@ -7,6 +7,9 @@ import {
   InvezgoError,
   RateLimitError,
   ValidationError,
+  verifyWebhook,
+  isWebhookEvent,
+  WebhookVerificationError,
   type TopChangeParams,
   type TopChangeResponse,
 } from '../src';
@@ -99,5 +102,30 @@ export async function snippets(apiKey: string): Promise<void> {
     const res = await client.analysis.getNews({ page, limit: 50 });
     for (const item of res.data) console.log(item.title);
     page = res.nextPage;
+  }
+
+  // WebSocket (Real-time)
+  const rt = client.realtime();
+  rt.on('trades', (msg) => {
+    for (const t of msg.data) console.log(t.code, t.price, t.lot, t.side);
+  });
+  rt.on('orderbook', (msg) => console.log(msg.code, msg.side, msg.levels));
+  rt.on('error', (err) => console.error(err.status, err.message));
+  rt.on('reconnect', ({ attempt, delay }) => console.warn(`Sambung ulang ke-${attempt} dalam ${delay} detik`));
+  rt.subscribeTrades(['BBCA', 'TLKM'], { minLot: 500 });
+  rt.subscribeOrderbook(['BBCA']);
+}
+
+/** README "Webhook": body of the Express handler (`req.body` is the raw Buffer from `express.raw`). */
+export async function webhookSnippet(req: { body: Buffer; headers: Record<string, string | string[] | undefined> }, res: { sendStatus(code: number): void }): Promise<void> {
+  try {
+    const event = await verifyWebhook(req.body, req.headers, process.env.INVEZGO_WEBHOOK_SECRET!);
+    res.sendStatus(204);
+    if (isWebhookEvent(event, 'update.summary')) {
+      console.log(event.data.date, event.data.path);
+    }
+  } catch (err) {
+    if (err instanceof WebhookVerificationError) res.sendStatus(err.reason === 'timestamp' ? 400 : 401);
+    else throw err;
   }
 }

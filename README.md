@@ -20,6 +20,8 @@ SDK resmi untuk [Invezgo API](https://invezgo.com), penyedia data pasar modal In
 - [Rotasi API Key](#rotasi-api-key)
 - [Penanganan Error](#penanganan-error)
 - [Pagination](#pagination)
+- [Webhook](#webhook)
+- [WebSocket (Real-time)](#websocket-real-time)
 - [Praktik yang Disarankan](#praktik-yang-disarankan)
 - [Pengembangan](#pengembangan)
 - [Dukungan](#dukungan)
@@ -283,6 +285,72 @@ while (page !== null) {
   page = res.nextPage;
 }
 ```
+
+## Webhook
+
+Webhook mengirim notifikasi (update data, Live Alert, kuota) ke endpoint HTTPS Anda dengan signature HMAC-SHA256. `verifyWebhook` memeriksa signature dan timestamp (toleransi default 300 detik), lalu mengembalikan event. Fungsi ini tidak memerlukan client maupun API key, menggunakan Web Crypto sehingga juga berjalan di edge runtime, dan wajib menerima **body mentah** sebelum di-parse sebagai JSON.
+
+```ts
+import express from 'express';
+import { verifyWebhook, isWebhookEvent, WebhookVerificationError } from '@invezgo/sdk';
+
+const app = express();
+
+app.post('/webhooks/invezgo', express.raw({ type: 'application/json' }), async (req, res) => {
+  try {
+    const event = await verifyWebhook(req.body, req.headers, process.env.INVEZGO_WEBHOOK_SECRET!);
+    res.sendStatus(204);
+    if (isWebhookEvent(event, 'update.summary')) {
+      console.log(event.data.date, event.data.path);
+    }
+  } catch (err) {
+    if (err instanceof WebhookVerificationError) res.sendStatus(err.reason === 'timestamp' ? 400 : 401);
+    else throw err;
+  }
+});
+```
+
+| Fungsi | Keterangan |
+|---|---|
+| `verifyWebhook(rawBody, headers, secret, { tolerance, now })` | Verifikasi dan decode. `headers` dapat berupa `Headers`, `req.headers`, atau `{ signature, timestamp }`. |
+| `parseWebhook(rawBody)` | Decode tanpa verifikasi, untuk pengujian atau body yang sudah diverifikasi. |
+| `isWebhookEvent(event, name)` | Type guard berdasarkan `event.event` (`"{domain}.{type}"`) untuk mendapatkan tipe `data` yang sesuai. |
+
+Kegagalan menghasilkan `WebhookVerificationError` dengan `reason` `timestamp`, `signature`, atau `payload`. Event dengan `domain` atau `type` yang belum dikenal tetap di-decode. Gunakan `event.id` untuk deduplikasi.
+
+## WebSocket (Real-time)
+
+Running trade dan order book real-time tersedia melalui `wss://api.invezgo.com/ws` untuk paket Developer **Elite**. `client.realtime()` menggunakan `apiKey` client dan menurunkan URL dari `baseUrl`. API key dikirim melalui header `Authorization`, tidak melalui URL.
+
+```ts
+const rt = client.realtime();
+
+rt.on('trades', (msg) => {
+  for (const t of msg.data) console.log(t.code, t.price, t.lot, t.side);
+});
+rt.on('orderbook', (msg) => console.log(msg.code, msg.side, msg.levels));
+rt.on('error', (err) => console.error(err.status, err.message));
+rt.on('reconnect', ({ attempt, delay }) => console.warn(`Sambung ulang ke-${attempt} dalam ${delay} detik`));
+
+rt.subscribeTrades(['BBCA', 'TLKM'], { minLot: 500 });
+rt.subscribeOrderbook(['BBCA']);
+```
+
+| Method | Keterangan |
+|---|---|
+| `subscribeTrades(codes?, { minLot, minValue })` | Running trade untuk kode tertentu (maksimal 200), atau seluruh saham bila `codes` tidak diisi. |
+| `subscribeOrderbook(codes)` | Order book untuk 1 hingga 20 kode. |
+| `unsubscribe(channel, codes?)` | Berhenti berlangganan kode tertentu, atau seluruh channel bila `codes` tidak diisi. |
+| `ping()` | Server membalas dengan event `pong`. |
+| `close()` | Menutup koneksi tanpa sambung ulang. |
+
+Event yang tersedia: `connected`, `subscribed`, `trades`, `orderbook`, `pong`, `lagged`, `message` (seluruh pesan, termasuk tipe yang belum dikenal), `error`, `close`, dan `reconnect`.
+
+- Langganan yang dibuat sebelum `connected` diantrekan, dan seluruh langganan dikirim ulang setelah setiap sambung ulang.
+- Sambung ulang otomatis menggunakan jeda 1, 2, 4, 8, 16, hingga 30 detik. Nonaktifkan dengan `client.realtime({ reconnect: false })`. Tidak ada sambung ulang setelah handshake `401` (`AuthenticationError`), `403` (`PaymentRequiredError`), kode penutupan `4400` (pesan tidak valid, dilaporkan sebagai `ValidationError`), atau `close()`.
+- Pesan yang terlewat saat koneksi terputus atau saat menerima `lagged` tidak dikirim ulang. Ambil kembali melalui REST, misalnya `client.analysis.getStockRunningTrade()` dan `client.analysis.getOrderBook()`.
+- Node.js 22 atau lebih baru menggunakan `WebSocket` bawaan. Pada Node.js 18 dan 20, gunakan paket [`ws`](https://www.npmjs.com/package/ws): `client.realtime({ WebSocket: require('ws') })`.
+- Tanpa client, gunakan `new InvezgoRealtime({ apiKey, url })`.
 
 ## Praktik yang Disarankan
 

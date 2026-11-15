@@ -19,6 +19,37 @@ export {
   TimeoutError,
 } from './errors';
 export type { InvezgoErrorInit } from './errors';
+export { verifyWebhook, parseWebhook, isWebhookEvent, WebhookVerificationError } from './webhook';
+export type {
+  WebhookEvent,
+  WebhookEventMap,
+  WebhookHeaders,
+  VerifyWebhookOptions,
+  WebhookVerificationReason,
+  WebhookUpdateData,
+  WebhookAlertStock,
+  WebhookAlertTriggeredData,
+  WebhookAlertDisabledData,
+  WebhookTestPingData,
+  WebhookQuotaData,
+} from './webhook';
+export { InvezgoRealtime, DEFAULT_REALTIME_URL } from './realtime';
+export type {
+  RealtimeOptions,
+  RealtimeEvents,
+  RealtimeMessage,
+  RealtimeTrade,
+  TradesFilter,
+  ConnectedMessage,
+  PongMessage,
+  SubscribedMessage,
+  ErrorMessage,
+  LaggedMessage,
+  TradesMessage,
+  OrderbookMessage,
+  WebSocketLike,
+  WebSocketConstructor,
+} from './realtime';
 export * from './generated/resources';
 export * from './generated/types';
 
