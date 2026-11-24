@@ -110,10 +110,14 @@ export async function snippets(apiKey: string): Promise<void> {
     for (const t of msg.data) console.log(t.code, t.price, t.lot, t.side);
   });
   rt.on('orderbook', (msg) => console.log(msg.code, msg.side, msg.levels));
+  rt.on('stock', (msg) => console.log(msg.code, msg.last, msg.change_pct));
+  rt.on('index', (msg) => console.log(msg.code, msg.last, msg.change_pct));
   rt.on('error', (err) => console.error(err.status, err.message));
   rt.on('reconnect', ({ attempt, delay }) => console.warn(`Sambung ulang ke-${attempt} dalam ${delay} detik`));
   rt.subscribeTrades(['BBCA', 'TLKM'], { minLot: 500 });
   rt.subscribeOrderbook(['BBCA']);
+  rt.subscribeStock(['BBCA']);
+  rt.subscribeIndex(['COMPOSITE', 'LQ45']);
 }
 
 /** README "Webhook": body of the Express handler (`req.body` is the raw Buffer from `express.raw`). */

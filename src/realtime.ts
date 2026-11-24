@@ -26,11 +26,13 @@ export interface RealtimeTrade {
   side: 'buy' | 'sell';
 }
 
+export type RealtimeChannel = 'trades' | 'orderbook' | 'stock' | 'index';
+
 export interface ConnectedMessage { type: 'connected' }
 export interface PongMessage { type: 'pong' }
 export interface SubscribedMessage {
   type: 'subscribed';
-  channel: 'trades' | 'orderbook';
+  channel: RealtimeChannel;
   /** `"*"` when subscribed to every stock. */
   codes: string[] | '*';
   min_lot?: number;
@@ -52,9 +54,51 @@ export interface OrderbookMessage {
   levels: unknown[];
   seq: number | null;
 }
+/** Full stock quote snapshot; fields not yet available from the exchange may be `null`. */
+export interface StockMessage {
+  type: 'stock';
+  code: string;
+  last: number;
+  prev?: number | null;
+  open?: number | null;
+  high?: number | null;
+  low?: number | null;
+  change?: number | null;
+  change_pct?: number | null;
+  /** Shares (not lots). */
+  volume?: number | null;
+  /** Rupiah. */
+  value?: number | null;
+  freq?: number | null;
+  avg?: number | null;
+  /** Indicative Equilibrium Price (pre-opening). */
+  iep?: number | null;
+  /** Indicative Equilibrium Volume, shares. */
+  iev?: number | null;
+  /** `HHMMSS` (WIB). */
+  time: string;
+  seq?: number | null;
+}
+/** Index snapshot. `code` keeps the exchange's casing (e.g. `Investor33`): compare case-insensitively. */
+export interface IndexMessage {
+  type: 'index';
+  code: string;
+  last: number;
+  prev?: number | null;
+  open?: number | null;
+  high?: number | null;
+  low?: number | null;
+  change?: number | null;
+  change_pct?: number | null;
+  volume?: number | null;
+  value?: number | null;
+  freq?: number | null;
+  /** `HHMMSS` (WIB). */
+  time: string;
+}
 /** Any server message; unknown `type`s are delivered as-is. */
 export type RealtimeMessage =
-  | ConnectedMessage | PongMessage | SubscribedMessage | ErrorMessage | LaggedMessage | TradesMessage | OrderbookMessage
+  | ConnectedMessage | PongMessage | SubscribedMessage | ErrorMessage | LaggedMessage | TradesMessage | OrderbookMessage | StockMessage | IndexMessage
   | { type: string; [key: string]: unknown };
 
 /** Event name → listener payload. */
@@ -63,6 +107,8 @@ export interface RealtimeEvents {
   subscribed: SubscribedMessage;
   trades: TradesMessage;
   orderbook: OrderbookMessage;
+  stock: StockMessage;
+  index: IndexMessage;
   pong: PongMessage;
   lagged: LaggedMessage;
   /** Every server message, including unknown types. */
@@ -128,7 +174,7 @@ function defaultWebSocket(): WebSocketConstructor | undefined {
 }
 
 /**
- * Real-time running trade and order book stream (`wss://api.invezgo.com/ws`, Elite plan).
+ * Real-time running trade, order book, stock quote and index stream (`wss://api.invezgo.com/ws`, Elite plan).
  * Connects on construction; subscriptions are queued until `connected` and replayed after every reconnect.
  */
 export class InvezgoRealtime {
@@ -147,6 +193,8 @@ export class InvezgoRealtime {
   #minLot?: number;
   #minValue?: number;
   readonly #orderbook = new Set<string>();
+  readonly #stock = new Set<string>();
+  #index: '*' | Set<string> | null = null;
 
   constructor(options: RealtimeOptions) {
     if (!options || typeof options.apiKey !== 'string' || !options.apiKey.trim()) {
@@ -201,14 +249,43 @@ export class InvezgoRealtime {
     this.#send({ op: 'subscribe', channel: 'orderbook', codes: upper });
   }
 
+  /** Stock quote (OHLC, volume, value, freq, IEP/IEV) for `codes` (1 to 50 codes per connection). */
+  subscribeStock(codes: string[]): void {
+    if (!Array.isArray(codes) || codes.length === 0) throw new TypeError('Invezgo: stock `codes` must not be empty');
+    const upper = codes.map((c) => c.toUpperCase());
+    if (new Set([...this.#stock, ...upper]).size > 50) throw new RangeError('Invezgo: at most 50 stock quote codes per connection');
+    upper.forEach((c) => this.#stock.add(c));
+    this.#send({ op: 'subscribe', channel: 'stock', codes: upper });
+  }
+
+  /** Index quotes for `codes` (e.g. `['COMPOSITE', 'LQ45']`), or every index when `codes` is omitted. */
+  subscribeIndex(codes?: string[]): void {
+    const upper = codes?.map((c) => c.toUpperCase());
+    if (upper) {
+      const next = new Set(this.#index instanceof Set ? this.#index : []);
+      upper.forEach((c) => next.add(c));
+      if (next.size > 100) throw new RangeError('Invezgo: at most 100 index codes per connection');
+      if (this.#index !== '*') this.#index = next;
+    } else {
+      this.#index = '*';
+    }
+    this.#send({ op: 'subscribe', channel: 'index', codes: upper });
+  }
+
   /** Stop `codes` on `channel`, or the whole channel (and trade filters) when `codes` is omitted. */
-  unsubscribe(channel: 'trades' | 'orderbook', codes?: string[]): void {
+  unsubscribe(channel: RealtimeChannel, codes?: string[]): void {
     const upper = codes?.map((c) => c.toUpperCase());
     if (channel === 'trades') {
       if (!upper) [this.#trades, this.#minLot, this.#minValue] = [null, undefined, undefined];
       else if (this.#trades instanceof Set) upper.forEach((c) => (this.#trades as Set<string>).delete(c));
-    } else if (!upper) this.#orderbook.clear();
-    else upper.forEach((c) => this.#orderbook.delete(c));
+    } else if (channel === 'index') {
+      if (!upper) this.#index = null;
+      else if (this.#index instanceof Set) upper.forEach((c) => (this.#index as Set<string>).delete(c));
+    } else {
+      const set = channel === 'stock' ? this.#stock : this.#orderbook;
+      if (!upper) set.clear();
+      else upper.forEach((c) => set.delete(c));
+    }
     this.#send({ op: 'unsubscribe', channel, codes: upper });
   }
 
@@ -242,6 +319,10 @@ export class InvezgoRealtime {
       });
     }
     if (this.#orderbook.size) this.#send({ op: 'subscribe', channel: 'orderbook', codes: [...this.#orderbook] });
+    if (this.#stock.size) this.#send({ op: 'subscribe', channel: 'stock', codes: [...this.#stock] });
+    if (this.#index === '*' || this.#index?.size) {
+      this.#send({ op: 'subscribe', channel: 'index', codes: this.#index === '*' ? undefined : [...this.#index] });
+    }
   }
 
   #connect(): void {

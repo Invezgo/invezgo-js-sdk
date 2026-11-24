@@ -146,15 +146,20 @@ test('realtime: reconnect replays the subscription state', async () => {
   rt.subscribeTrades(undefined, { minLot: 100 });
   rt.subscribeOrderbook(['BBCA', 'tlkm']);
   rt.unsubscribe('orderbook', ['TLKM']);
-  await until(() => conns[0]?.received.length === 2);
+  rt.subscribeStock(['bbca']);
+  rt.subscribeIndex(['composite', 'LQ45']);
+  rt.unsubscribe('index', ['LQ45']);
+  await until(() => conns[0]?.received.length === 4);
   conns[0].close(1011, 'restart');
 
-  await until(() => conns[1]?.received.length === 2);
+  await until(() => conns[1]?.received.length === 4);
   assert.deepEqual(reconnects, [{ attempt: 1, delay: 1 }]);
   assert.deepEqual(closes, [1011]);
   assert.deepEqual(conns[1].received, [
     { op: 'subscribe', channel: 'trades', min_lot: 100 },
     { op: 'subscribe', channel: 'orderbook', codes: ['BBCA'] },
+    { op: 'subscribe', channel: 'stock', codes: ['BBCA'] },
+    { op: 'subscribe', channel: 'index', codes: ['COMPOSITE'] },
   ]);
   rt.close();
   await sleep(50);
@@ -203,6 +208,9 @@ test('realtime: client-side guards', () => {
   assert.throws(() => rt.subscribeOrderbook([]), TypeError);
   assert.throws(() => rt.subscribeOrderbook(Array.from({ length: 21 }, (_, i) => `C${i}`)), RangeError);
   assert.throws(() => rt.subscribeTrades(Array.from({ length: 201 }, (_, i) => `C${i}`)), RangeError);
+  assert.throws(() => rt.subscribeStock([]), TypeError);
+  assert.throws(() => rt.subscribeStock(Array.from({ length: 51 }, (_, i) => `C${i}`)), RangeError);
+  assert.throws(() => rt.subscribeIndex(Array.from({ length: 101 }, (_, i) => `C${i}`)), RangeError);
   assert.throws(() => new InvezgoRealtime({ apiKey: '' }), TypeError);
   rt.close();
 });

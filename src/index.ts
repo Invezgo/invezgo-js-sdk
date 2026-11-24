@@ -47,6 +47,9 @@ export type {
   LaggedMessage,
   TradesMessage,
   OrderbookMessage,
+  StockMessage,
+  IndexMessage,
+  RealtimeChannel,
   WebSocketLike,
   WebSocketConstructor,
 } from './realtime';

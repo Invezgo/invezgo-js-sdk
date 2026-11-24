@@ -320,7 +320,7 @@ Kegagalan menghasilkan `WebhookVerificationError` dengan `reason` `timestamp`, `
 
 ## WebSocket (Real-time)
 
-Running trade dan order book real-time tersedia melalui `wss://api.invezgo.com/ws` untuk paket Developer **Elite**. `client.realtime()` menggunakan `apiKey` client dan menurunkan URL dari `baseUrl`. API key dikirim melalui header `Authorization`, tidak melalui URL.
+Running trade, order book, quote saham, dan indeks real-time tersedia melalui `wss://api.invezgo.com/ws` untuk paket Developer **Elite**. `client.realtime()` menggunakan `apiKey` client dan menurunkan URL dari `baseUrl`. API key dikirim melalui header `Authorization`, tidak melalui URL.
 
 ```ts
 const rt = client.realtime();
@@ -329,23 +329,30 @@ rt.on('trades', (msg) => {
   for (const t of msg.data) console.log(t.code, t.price, t.lot, t.side);
 });
 rt.on('orderbook', (msg) => console.log(msg.code, msg.side, msg.levels));
+rt.on('stock', (msg) => console.log(msg.code, msg.last, msg.change_pct));
+rt.on('index', (msg) => console.log(msg.code, msg.last, msg.change_pct));
 rt.on('error', (err) => console.error(err.status, err.message));
 rt.on('reconnect', ({ attempt, delay }) => console.warn(`Sambung ulang ke-${attempt} dalam ${delay} detik`));
 
 rt.subscribeTrades(['BBCA', 'TLKM'], { minLot: 500 });
 rt.subscribeOrderbook(['BBCA']);
+rt.subscribeStock(['BBCA']);
+rt.subscribeIndex(['COMPOSITE', 'LQ45']);
 ```
 
 | Method | Keterangan |
 |---|---|
 | `subscribeTrades(codes?, { minLot, minValue })` | Running trade untuk kode tertentu (maksimal 200), atau seluruh saham bila `codes` tidak diisi. |
 | `subscribeOrderbook(codes)` | Order book untuk 1 hingga 20 kode. |
+| `subscribeStock(codes)` | Quote saham (OHLC, volume, nilai, frekuensi, IEP/IEV) untuk 1 hingga 50 kode. |
+| `subscribeIndex(codes?)` | Quote indeks tertentu (maksimal 100), atau seluruh indeks bila `codes` tidak diisi. |
 | `unsubscribe(channel, codes?)` | Berhenti berlangganan kode tertentu, atau seluruh channel bila `codes` tidak diisi. |
 | `ping()` | Server membalas dengan event `pong`. |
 | `close()` | Menutup koneksi tanpa sambung ulang. |
 
-Event yang tersedia: `connected`, `subscribed`, `trades`, `orderbook`, `pong`, `lagged`, `message` (seluruh pesan, termasuk tipe yang belum dikenal), `error`, `close`, dan `reconnect`.
+Event yang tersedia: `connected`, `subscribed`, `trades`, `orderbook`, `stock`, `index`, `pong`, `lagged`, `message` (seluruh pesan, termasuk tipe yang belum dikenal), `error`, `close`, dan `reconnect`.
 
+- Kode indeks pada event `index` mengikuti penulisan bursa (misalnya `Investor33`); bandingkan tanpa membedakan huruf besar dan kecil.
 - Langganan yang dibuat sebelum `connected` diantrekan, dan seluruh langganan dikirim ulang setelah setiap sambung ulang.
 - Sambung ulang otomatis menggunakan jeda 1, 2, 4, 8, 16, hingga 30 detik. Nonaktifkan dengan `client.realtime({ reconnect: false })`. Tidak ada sambung ulang setelah handshake `401` (`AuthenticationError`), `403` (`PaymentRequiredError`), kode penutupan `4400` (pesan tidak valid, dilaporkan sebagai `ValidationError`), atau `close()`.
 - Pesan yang terlewat saat koneksi terputus atau saat menerima `lagged` tidak dikirim ulang. Ambil kembali melalui REST, misalnya `client.analysis.getStockRunningTrade()` dan `client.analysis.getOrderBook()`.
