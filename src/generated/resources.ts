@@ -26,6 +26,8 @@ import type {
   BrokerStalkerResponse,
   CalendarParams,
   CalendarResponse,
+  CandleBrokersParams,
+  CandleBrokersResponse,
   DeleteIdsRequest,
   DisclosureParams,
   DisclosureResponse,
@@ -35,6 +37,8 @@ import type {
   FinancialStatementResponse,
   FlowOfFundsParams,
   FlowOfFundsResponse,
+  FootprintParams,
+  FootprintResponse,
   FreeFloatParams,
   FreeFloatResponse,
   IndexChartParams,
@@ -68,6 +72,8 @@ import type {
   KeystatChartResponse,
   KeystatParams,
   KeystatResponse,
+  LargeOrdersParams,
+  LargeOrdersResponse,
   MomentumChartParams,
   MomentumChartResponse,
   MultiTimeChartParams,
@@ -881,6 +887,110 @@ export class AnalysisResource {
    */
   getMultiTimeChart(code: string, params: MultiTimeChartParams, options?: RequestOptions): Promise<MultiTimeChartResponse> {
     return this.transport.request<MultiTimeChartResponse>({ method: 'GET', route: '/analysis/chart/multi-time/{code}', cache: 'realtime', pathParams: { code }, query: params }, options);
+  }
+
+  /**
+   * Stock Large Orders
+   *
+   * Get large aggressive orders for one trading day: trades are grouped by the aggressor's order number (the party that triggered the trade; the side comes from `action` BUY/SELL), regular board (RG) only.
+   *
+   * Response:
+   * - count: Number of all aggressor orders on that day (before truncation)
+   * - orders: Up to the 300 orders with the largest value, in ascending time order, each item contains:
+   *   - time: Time of the order's first trade (HH:MM:SS, WIB)
+   *   - time_last: Time of the order's last trade (HH:MM:SS, WIB)
+   *   - side: Aggressor side, `BUY` (HAKA) or `SELL` (HAKI)
+   *   - lot: Total lots of the order
+   *   - value: Total order value (Rupiah)
+   *   - price: Volume-weighted average price of the order (Rupiah, rounded)
+   *   - trades: Number of trades that make up the order
+   *   - broker: Aggressor broker code (available only after EOD; may be empty before then)
+   *   - foreign: `true` if the aggressor is a foreign investor
+   *
+   * Update: Real-time
+   *
+   * Limited to data for the last 2 years
+   * Initial Data: 2010-01-01 [ENTERPRISE]
+   *
+   * `GET /analysis/large-orders/{code}` — cached (`cache.realtimeTtl`).
+   * @see https://invezgo.com/id/analysis/realtime/BBCA?date=2025-01-02&scope=volume&range=5
+   *
+   * @param code Kode saham emiten yang tercatat di BEI, mis. `BBCA`. Tidak case-sensitive. Daftar kode tersedia di `/analysis/list/stock`. Example: `BBCA`.
+   * @param params Query parameters.
+   * @param options Per-request options (e.g. `signal`).
+   * @returns LargeOrdersResponse
+   */
+  getLargeOrders(code: string, params: LargeOrdersParams, options?: RequestOptions): Promise<LargeOrdersResponse> {
+    return this.transport.request<LargeOrdersResponse>({ method: 'GET', route: '/analysis/large-orders/{code}', cache: 'realtime', pathParams: { code }, query: params }, options);
+  }
+
+  /**
+   * Stock Candle Brokers
+   *
+   * Get the brokers behind the trades of one time window (e.g. one candle) on a trading day: aggressor and passive sides, net per broker, and foreign lot totals. Regular board (RG) only, with a known trade side.
+   *
+   * The window is minute-aligned: `timefrom` at second :00, `timeto` at second :59 (inclusive), at most 1 hour. Format `HH:MM:SS` or `HH:MM`; anything else is rejected with 422.
+   *
+   * Response:
+   * - aggr_buy_lot: Total aggressive buy (HAKA) lots in the window
+   * - aggr_sell_lot: Total aggressive sell (HAKI) lots in the window
+   * - foreign_buy_lot: Total lots bought by foreign investors
+   * - foreign_sell_lot: Total lots sold by foreign investors
+   * - aggr_buy: Top 10 aggressive buying brokers, each item contains `broker`, `lot`, `foreign`
+   * - aggr_sell: Top 10 aggressive selling brokers, each item contains `broker`, `lot`, `foreign`
+   * - pass_buy: Top 10 passive buying brokers (counterparties of aggressive sells), each item contains `broker`, `lot`, `foreign`
+   * - pass_sell: Top 10 passive selling brokers (counterparties of aggressive buys), each item contains `broker`, `lot`, `foreign`
+   * - net: Top 10 brokers by absolute buy-minus-sell, each item contains `broker`, `buy`, `sell`, `net` (buy minus sell, lots), `foreign`
+   *
+   * Update: Real-time
+   *
+   * Limited to data for the last 2 years
+   * Initial Data: 2010-01-01 [ENTERPRISE]
+   *
+   * `GET /analysis/candle-brokers/{code}` — cached (`cache.ttl`).
+   * @see https://invezgo.com/id/analysis/realtime/BBCA?date=2025-01-02&scope=volume&range=5
+   *
+   * @param code Kode saham emiten yang tercatat di BEI, mis. `BBCA`. Tidak case-sensitive. Daftar kode tersedia di `/analysis/list/stock`. Example: `BBCA`.
+   * @param params Query parameters.
+   * @param options Per-request options (e.g. `signal`).
+   * @returns CandleBrokersResponse
+   */
+  getCandleBrokers(code: string, params: CandleBrokersParams, options?: RequestOptions): Promise<CandleBrokersResponse> {
+    return this.transport.request<CandleBrokersResponse>({ method: 'GET', route: '/analysis/candle-brokers/{code}', cache: 'default', pathParams: { code }, query: params }, options);
+  }
+
+  /**
+   * Stock Footprint
+   *
+   * Get the footprint of one trading day: traded volume per minute per price, split by aggressor side (BUY = HAKA, SELL = HAKI; the side comes from `action`), regular board (RG) only.
+   *
+   * Response:
+   * - minutes: Minutes that have trades, in ascending order, each item contains:
+   *   - time: Trade minute (HH:MM, WIB)
+   *   - rows: Prices within that minute, in ascending price order, each item contains:
+   *     - price: Price (Rupiah)
+   *     - buy_lot: Total aggressor-buy lots
+   *     - sell_lot: Total aggressor-sell lots
+   *     - buy_value: Total aggressor-buy value (Rupiah)
+   *     - sell_value: Total aggressor-sell value (Rupiah)
+   *
+   * A day with no trade data at all returns 503; `{"minutes": []}` only when trades exist but none are regular board (RG) with a determinable aggressor side.
+   *
+   * Update: Real-time
+   *
+   * Limited to data for the last 2 years
+   * Initial Data: 2010-01-01 [ENTERPRISE]
+   *
+   * `GET /analysis/footprint/{code}` — cached (`cache.realtimeTtl`).
+   * @see https://invezgo.com/id/analysis/realtime/BBCA?date=2025-01-02&scope=volume&range=5
+   *
+   * @param code Kode saham emiten yang tercatat di BEI, mis. `BBCA`. Tidak case-sensitive. Daftar kode tersedia di `/analysis/list/stock`. Example: `BBCA`.
+   * @param params Query parameters.
+   * @param options Per-request options (e.g. `signal`).
+   * @returns FootprintResponse
+   */
+  getFootprint(code: string, params: FootprintParams, options?: RequestOptions): Promise<FootprintResponse> {
+    return this.transport.request<FootprintResponse>({ method: 'GET', route: '/analysis/footprint/{code}', cache: 'realtime', pathParams: { code }, query: params }, options);
   }
 
   /**
@@ -2467,7 +2577,7 @@ export class BatchResource {
    *
    * Data Retrieval Modes:
    * - Realtime: Without date/time parameters - uses realtime data; falls back to the latest data when it is not available yet
-   * - Historical: With date and time parameters - retrieves order book data at that exact minute (WIB); bid and offer are empty when there is none
+   * - Historical: With date and time parameters - retrieves the order book snapshot nearest to that time on that date (WIB); bid and offer are empty when that date has no data
    *
    * Response (array, one item per code):
    * - code: Stock code (with the market suffix when market is not RG, e.g. BBCANG)
@@ -2483,7 +2593,7 @@ export class BatchResource {
    *
    * Historical Parameters:
    * - date: Date in YYYY-MM-DD format (optional, data available from 2026-03-25)
-   * - time: WIB time in HH:MM format with minute precision (optional)
+   * - time: WIB time in HH:MM or HH:MM:SS format (optional); nearest snapshot on that date
    * - Note: fill date and time together for historical data; when only one is filled, the latest data is used
    *
    * Access & Limits:

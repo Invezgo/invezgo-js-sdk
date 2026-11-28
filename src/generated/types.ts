@@ -765,6 +765,132 @@ export interface MultiTimeChartItem {
   volume?: number | null;
 }
 
+/** Large aggressive orders of one day (regular board) */
+export interface LargeOrdersResponse {
+  /** Number of all aggressor orders that day, before truncation to 300 */
+  count: number;
+  /** The 300 largest orders by value, in ascending time order */
+  orders: LargeOrdersOrders[];
+}
+
+export interface LargeOrdersOrders {
+  /** First trade time of the order (HH:MM:SS, WIB) */
+  time: string;
+  /** Last trade time of the order (HH:MM:SS, WIB) */
+  time_last: string;
+  /** Aggressor side */
+  side: "BUY" | "SELL";
+  /** Total lots */
+  lot: number;
+  /** Total value (Rupiah) */
+  value: number;
+  /** Volume-weighted average price (Rupiah, rounded) */
+  price: number;
+  /** Number of trades in the order */
+  trades: number;
+  /** Aggressor broker code */
+  broker: string;
+  /** True if the aggressor is a foreign investor */
+  foreign: boolean;
+}
+
+/** Brokers behind the trades of one minute-aligned time window */
+export interface CandleBrokersResponse {
+  /** Aggressive buy lots */
+  aggr_buy_lot: number;
+  /** Aggressive sell lots */
+  aggr_sell_lot: number;
+  /** Foreign buy lots */
+  foreign_buy_lot: number;
+  /** Foreign sell lots */
+  foreign_sell_lot: number;
+  /** Top 10 aggressive buying brokers */
+  aggr_buy: CandleBrokersAggrBuy[];
+  /** Top 10 aggressive selling brokers */
+  aggr_sell: CandleBrokersAggrSell[];
+  /** Top 10 passive buying brokers */
+  pass_buy: CandleBrokersPassBuy[];
+  /** Top 10 passive selling brokers */
+  pass_sell: CandleBrokersPassSell[];
+  /** Top 10 brokers by absolute buy minus sell */
+  net: CandleBrokersNet[];
+}
+
+export interface CandleBrokersAggrBuy {
+  /** Broker code */
+  broker: string;
+  /** Lots */
+  lot: number;
+  /** True if the broker traded for a foreign investor */
+  foreign: boolean;
+}
+
+export interface CandleBrokersAggrSell {
+  /** Broker code */
+  broker: string;
+  /** Lots */
+  lot: number;
+  /** True if the broker traded for a foreign investor */
+  foreign: boolean;
+}
+
+export interface CandleBrokersPassBuy {
+  /** Broker code */
+  broker: string;
+  /** Lots */
+  lot: number;
+  /** True if the broker traded for a foreign investor */
+  foreign: boolean;
+}
+
+export interface CandleBrokersPassSell {
+  /** Broker code */
+  broker: string;
+  /** Lots */
+  lot: number;
+  /** True if the broker traded for a foreign investor */
+  foreign: boolean;
+}
+
+export interface CandleBrokersNet {
+  /** Broker code */
+  broker: string;
+  /** Bought lots */
+  buy: number;
+  /** Sold lots */
+  sell: number;
+  /** Buy minus sell (lots) */
+  net: number;
+  /** True if the broker traded for a foreign investor */
+  foreign: boolean;
+}
+
+/** Footprint of one day: traded lots and value per minute and price, by aggressor side (regular board) */
+export interface FootprintResponse {
+  /** Minutes that have trades, ascending */
+  minutes: FootprintMinutes[];
+}
+
+export interface FootprintMinutes {
+  /** Minute of the trades (HH:MM, WIB) */
+  time: string;
+  /** Prices within the minute, ascending */
+  rows: FootprintMinutesRows[];
+}
+
+export interface FootprintMinutesRows {
+  /** Price (Rupiah) */
+  price: number;
+  /** Aggressor-buy lots */
+  buy_lot: number;
+  /** Aggressor-sell lots */
+  sell_lot: number;
+  /** Aggressor-buy value (Rupiah) */
+  buy_value: number;
+  /** Aggressor-sell value (Rupiah) */
+  sell_value: number;
+}
+
 export interface IndicatorChartItem {
   /** Trading date, WIB wall-clock DateTime with a literal Z suffix (not UTC), e.g. 2026-10-16T00:00:00.000Z */
   date: string;
@@ -3536,7 +3662,7 @@ export interface StockRunningTradeParams {
   date: string;
   /** Nomor halaman, dimulai dari 1. Default: `1`. Min: `1`. Example: `1`. */
   page?: number;
-  /** Jumlah transaksi per halaman. Default: `50`. Min: `1`. Max: `1000`. Example: `50`. */
+  /** Jumlah transaksi per halaman. Default: `50`. Min: `1`. Max: `500`. Example: `50`. */
   limit?: number;
   /** Sisi transaksi: `BUY` = match di harga offer (inisiatif beli), `SELL` = match di harga bid (inisiatif jual), `ALL` = seluruh transaksi. Diabaikan saat jam bursa (tanggal hari ini, 08:45–16:15 WIB pada hari bursa); hanya berlaku pada pengambilan data sehari penuh. Default: `ALL`. Example: `ALL`. */
   type?: "ALL" | "BUY" | "SELL";
@@ -3620,6 +3746,28 @@ export interface MultiTimeChartParams {
   to: string;
   /** Timeframe candle: `1`, `5`, `15`, `30`, `60` = menit; `D` = harian, `W` = mingguan, `M` = bulanan. Batas data historis: `1` = 3 bulan, `5` = 6 bulan, `15` = 12 bulan, lainnya 24 bulan. Opsional, default `D`; harus huruf kapital. Default: `D`. Example: `D`. */
   timeframe?: "1" | "5" | "15" | "30" | "60" | "D" | "W" | "M";
+}
+
+/** Query parameters for `GET /analysis/large-orders/{code}`. */
+export interface LargeOrdersParams {
+  /** Tanggal data (`YYYY-MM-DD`). Gunakan hari bursa; tanggal libur bursa dapat menghasilkan data kosong. Format: `YYYY-MM-DD`. Example: `2024-12-30`. */
+  date: string;
+}
+
+/** Query parameters for `GET /analysis/candle-brokers/{code}`. */
+export interface CandleBrokersParams {
+  /** Tanggal data (`YYYY-MM-DD`). Gunakan hari bursa; tanggal libur bursa dapat menghasilkan data kosong. Format: `YYYY-MM-DD`. Example: `2024-12-30`. */
+  date: string;
+  /** Awal jendela waktu (`HH:MM` atau `HH:MM:SS`, WIB). Harus kelipatan menit penuh (detik `:00`). Example: `09:00:00`. */
+  timefrom: string;
+  /** Akhir jendela waktu inklusif (`HH:MM` atau `HH:MM:SS`, WIB). Harus berakhir di detik `:59`, tidak lebih awal dari `timefrom`, dan maksimal 1 jam dari `timefrom`. Example: `09:04:59`. */
+  timeto: string;
+}
+
+/** Query parameters for `GET /analysis/footprint/{code}`. */
+export interface FootprintParams {
+  /** Tanggal data (`YYYY-MM-DD`). Gunakan hari bursa; tanggal libur bursa dapat menghasilkan data kosong. Format: `YYYY-MM-DD`. Example: `2024-12-30`. */
+  date: string;
 }
 
 /** Query parameters for `GET /analysis/chart/stock/{indicator}/{code}`. */
@@ -4048,7 +4196,7 @@ export interface BatchOrderBookParams {
   market?: "RG" | "NG" | "TN";
   /** Tanggal order book historis (`YYYY-MM-DD`), data tersedia mulai `2026-03-25`. Kirim bersama `time`; kosongkan keduanya untuk data realtime. Format: `YYYY-MM-DD`. Example: `2026-03-25`. */
   date?: string;
-  /** Jam order book dalam WIB, format `HH:mm` dengan presisi menit. Kirim bersama `date`. Example: `09:30`. */
+  /** Jam order book dalam WIB, format `HH:mm` atau `HH:mm:ss`; diambil snapshot terdekat pada tanggal tersebut. Kirim bersama `date`. Example: `09:30`. */
   time?: string;
 }
 
